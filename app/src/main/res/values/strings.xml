@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Planer</string>
+
+    <string-array name="calendar_value">
+        <item>달력</item>
+        <item>일정표</item>
+    </string-array>
 </resources>
