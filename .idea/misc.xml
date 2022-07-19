@@ -3,10 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/ic_baseline_arrow_drop_down_24.xml" value="0.1765" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/ic_baseline_check_box_24.xml" value="0.1765" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/ic_baseline_menu_24.xml" value="0.1765" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/logout_btn_layout.xml" value="0.1765" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/spinner_layout.xml" value="0.1455" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/spinner_option.xml" value="0.1455" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/font/a.xml" value="0.1953125" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/activity_main.xml" value="0.23125" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/activity_main_page.xml" value="0.23125" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/activity_main_page.xml" value="0.264" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/drawer_header.xml" value="0.264" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/xml/string.xml" value="0.18974358974358974" />
       </map>
     </option>
