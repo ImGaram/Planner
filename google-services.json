@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "295191687909",
+    "project_id": "planner-eae12",
+    "storage_bucket": "planner-eae12.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:295191687909:android:70e98c60820fb50e9e9a0c",
+        "android_client_info": {
+          "package_name": "com.example.planer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "295191687909-q3oet8l9uegq2819jd4tmibhfroaaefq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.planer",
+            "certificate_hash": "679edd4e4441a6210c28c24eba23aef14f28854d"
+          }
+        },
+        {
+          "client_id": "295191687909-2rokjs84ce4vhpg1c3dsck41rp0nlc4f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuLzBTwBB2ni-TRw-1PhYJaK8wm4jpJYk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "295191687909-2rokjs84ce4vhpg1c3dsck41rp0nlc4f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
