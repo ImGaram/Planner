@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable-v24/background_document.xml" value="0.139" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable-v24/background_progress_check_image.xml" value="0.139" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/background_check_image.xml" value="0.139" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/drawer_header_item1.xml" value="0.139" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/ic_baseline_arrow_drop_down_24.xml" value="0.1765" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/ic_baseline_check_box_24.xml" value="0.1765" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/ic_baseline_menu_24.xml" value="0.1765" />
@@ -12,7 +16,8 @@
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/font/a.xml" value="0.1953125" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/activity_main.xml" value="0.23125" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/activity_main_page.xml" value="0.264" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/drawer_header.xml" value="0.264" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/custom_dialog_set_plan.xml" value="0.264" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/drawer_header.xml" value="0.2" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/menu/drawer_menu.xml" value="0.23125" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/xml/string.xml" value="0.18974358974358974" />
       </map>
