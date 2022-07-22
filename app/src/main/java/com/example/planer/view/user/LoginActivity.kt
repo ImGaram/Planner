@@ -1,10 +1,9 @@
-package com.example.planer.view.login
+package com.example.planer.view.user
 
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.planer.R
 import com.example.planer.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
@@ -21,5 +20,7 @@ class LoginActivity : AppCompatActivity() {
         binding.createNewUserButton.setOnClickListener {
             startActivity(Intent(this, SignInActivity::class.java))
         }
+
+        binding.guestButton.setOnClickListener { finish() }
     }
 }

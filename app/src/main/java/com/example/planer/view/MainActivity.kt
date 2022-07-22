@@ -1,6 +1,7 @@
 package com.example.planer.view
 
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -14,7 +15,7 @@ import androidx.core.view.GravityCompat
 import com.example.planer.R
 import com.example.planer.databinding.ActivityMainBinding
 import com.example.planer.databinding.CustomDialogSetPlanBinding
-import com.example.planer.view.login.LoginActivity
+import com.example.planer.view.user.LoginActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
