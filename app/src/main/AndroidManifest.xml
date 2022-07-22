@@ -16,10 +16,10 @@
         android:theme="@style/Theme.Planer"
         tools:targetApi="31" >
         <activity
-            android:name=".view.login.SignInActivity"
+            android:name=".view.user.SignInActivity"
             android:exported="false" />
         <activity
-            android:name=".view.login.LoginActivity"
+            android:name=".view.user.LoginActivity"
             android:exported="false" />
         <activity
             android:name=".view.MainActivity"
