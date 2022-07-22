@@ -12,11 +12,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.example.planer.R
 import com.example.planer.databinding.ActivitySignInBinding
-import com.example.planer.viewmodel.SignInViewModel
+import com.example.planer.viewmodel.UserViewModel
 
 class SignInActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignInBinding
-    private val viewModel: SignInViewModel by viewModels()
+    private val viewModel: UserViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +44,12 @@ class SignInActivity : AppCompatActivity() {
                     finish()
                     startActivity(Intent(applicationContext, LoginActivity::class.java))
                 }
-                else Toast.makeText(this, "회원가입에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                else {
+                    binding.signInProgress.visibility = View.GONE
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+
+                    Toast.makeText(this, "회원가입에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
             })
         }
         binding.createUserCancelBtn.setOnClickListener { finish() }

@@ -1,7 +1,6 @@
 package com.example.planer.view
 
 import android.app.AlertDialog
-import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -9,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.GravityCompat
@@ -16,10 +16,17 @@ import com.example.planer.R
 import com.example.planer.databinding.ActivityMainBinding
 import com.example.planer.databinding.CustomDialogSetPlanBinding
 import com.example.planer.view.user.LoginActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     var temp = "plan"
+
+    private val auth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,11 +40,28 @@ class MainActivity : AppCompatActivity() {
 
         // header 정보 가져오기
         val headerView = binding.navigationDrawer.getHeaderView(0)
+        getUserName(headerView)
+
         headerView.findViewById<AppCompatButton>(R.id.login_button).setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
         }
 
         setCalender()
+    }
+
+    private fun getUserName(headerView: View) {
+        val reference = FirebaseDatabase.getInstance().getReference("Users").child(auth.uid.toString()).child("name")
+
+        reference.addValueEventListener(object :ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (intent.getStringExtra("uid") != null) {
+                    // 데이터 활용
+                    headerView.findViewById<TextView>(R.id.text_user_name).text = snapshot.getValue(String::class.java)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
     private fun getPlanBtnText() {
