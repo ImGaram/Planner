@@ -5,7 +5,7 @@
     <data>
         <variable
             name="signIn"
-            type="com.example.planer.viewmodel.SignInViewModel" />
+            type="com.example.planer.viewmodel.UserViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

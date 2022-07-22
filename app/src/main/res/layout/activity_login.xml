@@ -1,105 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/login_bg"
-    android:orientation="vertical"
-    tools:context=".view.user.LoginActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="login"
+            type="com.example.planer.viewmodel.UserViewModel" />
+    </data>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="schedule planner"
-        android:textSize="35sp"
-        android:layout_gravity="center"
-        android:layout_marginTop="75dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="email"
-        android:textSize="20sp"
-        android:layout_marginTop="70dp"
-        android:layout_marginStart="55dp"/>
-
-    <EditText
-        android:id="@+id/edit_email_text"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:background="@drawable/edit_text_bg"
-        android:hint="email"
-        android:padding="10dp"
-        android:textSize="25sp"/>
+        android:layout_height="match_parent"
+        android:background="@drawable/login_bg"
+        tools:context=".view.user.LoginActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="password"
-        android:textSize="20sp"
-        android:layout_marginTop="30dp"
-        android:layout_marginStart="55dp"/>
-
-    <EditText
-        android:id="@+id/edit_password_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:background="@drawable/edit_text_bg"
-        android:hint="password"
-        android:padding="10dp"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:orientation="horizontal">
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/create_new_user_button"
+        <ProgressBar
+            android:id="@+id/login_progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="회원 가입"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:background="@drawable/button_bg1"
-            android:layout_weight="1"/>
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/guest_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="게스트로 접속"
-            android:textSize="20sp"
-            android:layout_marginStart="30dp"
-            android:background="@drawable/button_bg2"
-            android:layout_weight="1"/>
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="로그인"
-        android:textSize="25sp"
-        android:textColor="@color/white"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="50dp"
-        android:background="@drawable/button_bg4"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="schedule planner"
+                android:textSize="35sp"
+                android:layout_gravity="center"
+                android:layout_marginTop="75dp"/>
 
-    <TextView
-        android:id="@+id/forget_password_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="비밀번호를 잃어버리셨나요?"
-        android:textSize="18sp"
-        android:layout_gravity="center"
-        android:layout_marginTop="5dp"/>
-</LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="email"
+                android:textSize="20sp"
+                android:layout_marginTop="70dp"
+                android:layout_marginStart="55dp"/>
+
+            <EditText
+                android:id="@+id/edit_email_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:background="@drawable/edit_text_bg"
+                android:hint="email"
+                android:padding="10dp"
+                android:textSize="25sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="password"
+                android:textSize="20sp"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="55dp"/>
+
+            <EditText
+                android:id="@+id/edit_password_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:background="@drawable/edit_text_bg"
+                android:hint="password"
+                android:padding="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/create_new_user_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="회원 가입"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:background="@drawable/button_bg1"
+                    android:layout_weight="1"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/guest_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="게스트로 접속"
+                    android:textSize="20sp"
+                    android:layout_marginStart="30dp"
+                    android:background="@drawable/button_bg2"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/main_login_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="로그인"
+                android:textSize="25sp"
+                android:textColor="@color/white"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="50dp"
+                android:background="@drawable/button_bg4"/>
+
+            <TextView
+                android:id="@+id/forget_password_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="비밀번호를 잃어버리셨나요?"
+                android:textSize="18sp"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"/>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
