@@ -5,4 +5,10 @@
         <item>달력</item>
         <item>일정표</item>
     </string-array>
+
+    <string-array name="category">
+        <item>계획</item>
+        <item>스케줄</item>
+        <item>기타</item>
+    </string-array>
 </resources>
