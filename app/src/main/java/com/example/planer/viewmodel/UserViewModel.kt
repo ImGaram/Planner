@@ -9,7 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
-class SignInViewModel(application: Application): AndroidViewModel(application) {
+class UserViewModel(application: Application): AndroidViewModel(application) {
     val auth = FirebaseAuth.getInstance()
     val database = FirebaseDatabase.getInstance()
     var result = MutableLiveData<Boolean>()
@@ -30,14 +30,20 @@ class SignInViewModel(application: Application): AndroidViewModel(application) {
                 hashMap["email"] = email
                 hashMap["password"] = password
                 databaseRef.setValue(hashMap).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Log.d("SUCCESS", "signInLogic: 회원가입 성공함")
-                        result.value = true
-                    } else {
-                        result.value = false
-                    }
+                    result.value = task.isSuccessful
                 }
             }
         }
+    }
+
+    fun loginLogic(email: String, password: String) {
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+            result.value = false
+        } else {
+            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+                result.value = it.isSuccessful
+            }
+        }
+
     }
 }
