@@ -1,17 +1,13 @@
 package com.example.planer.viewmodel
 
-import android.app.Application
 import android.text.TextUtils
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 
-class UserViewModel(application: Application): AndroidViewModel(application) {
+class UserViewModel: ViewModel() {
     private val auth = FirebaseAuth.getInstance()
     private val database = FirebaseDatabase.getInstance()
     var result = MutableLiveData<Boolean>()
