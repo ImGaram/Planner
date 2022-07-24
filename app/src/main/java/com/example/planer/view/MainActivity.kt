@@ -42,8 +42,14 @@ class MainActivity : AppCompatActivity() {
         val headerView = binding.navigationDrawer.getHeaderView(0)
         getUserName(headerView)
 
-        headerView.findViewById<AppCompatButton>(R.id.login_button).setOnClickListener {
-            startActivity(Intent(this, LoginActivity::class.java))
+        val loginBtn = headerView.findViewById<AppCompatButton>(R.id.login_button)
+        loginBtn.setOnClickListener {
+            if (loginBtn.text.toString() == "로그인") startActivity(Intent(this, LoginActivity::class.java))
+            else if (loginBtn.text.toString() == "로그아웃") {
+                auth.signOut()
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+            }
         }
 
         setCalender()
@@ -54,9 +60,10 @@ class MainActivity : AppCompatActivity() {
 
         reference.addValueEventListener(object :ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (intent.getStringExtra("uid") != null) {
+                if (auth.currentUser?.uid != null) {
                     // 데이터 활용
                     headerView.findViewById<TextView>(R.id.text_user_name).text = snapshot.getValue(String::class.java)
+                    headerView.findViewById<TextView>(R.id.login_button).text = "로그아웃"
                 }
             }
 
@@ -64,17 +71,9 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun getPlanBtnText() {
-        temp = "plan"
-    }
-
-    private fun getScheduleBtnText() {
-        temp = "schedule"
-    }
-
-    private fun getOtherBtnText() {
-        temp = "other"
-    }
+    private fun getPlanBtnText() { temp = "plan" }
+    private fun getScheduleBtnText() { temp = "schedule" }
+    private fun getOtherBtnText() { temp = "other" }
 
     private fun setCalender() {
         binding.calendarView.setOnDateChangeListener { calendarView, year, month, day ->
