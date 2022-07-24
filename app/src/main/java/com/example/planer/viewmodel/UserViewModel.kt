@@ -3,15 +3,17 @@ package com.example.planer.viewmodel
 import android.app.Application
 import android.text.TextUtils
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class UserViewModel(application: Application): AndroidViewModel(application) {
-    val auth = FirebaseAuth.getInstance()
-    val database = FirebaseDatabase.getInstance()
+    private val auth = FirebaseAuth.getInstance()
+    private val database = FirebaseDatabase.getInstance()
     var result = MutableLiveData<Boolean>()
 
     fun signInLogic(name: String, email: String, password: String) {
@@ -28,7 +30,6 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
                 hashMap["uid"] = firebaseUser
                 hashMap["name"] = name
                 hashMap["email"] = email
-                hashMap["password"] = password
                 databaseRef.setValue(hashMap).addOnCompleteListener { task ->
                     result.value = task.isSuccessful
                 }
@@ -44,6 +45,20 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
                 result.value = it.isSuccessful
             }
         }
+    }
 
+    fun updatePasswordLogic(email: String) {
+        if (email.isEmpty()) {
+            result.value = false
+        } else {
+            auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    result.value = true
+                } else {
+                    result.value = false
+                    Log.d("VIEWMODEL", "updatePasswordLogic: ${task.exception}")
+                }
+            }
+        }
     }
 }
