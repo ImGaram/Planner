@@ -1,10 +1,10 @@
 package com.example.planer.model
 
 data class PlanDto(
-    val id: Int,
-    val title: String,
-    val description: String,
-    val date: String,
-    val createUid: String,
-    val category: String
+    var id: Int? = null,
+    var title: String? = null,
+    var description: String? = null,
+    var date: String? = null,
+    var createUid: String? = null,
+    var category: String? = null
 )
