@@ -52,6 +52,7 @@ class LoginActivity : AppCompatActivity() {
                     binding.loginProgressBar.visibility = View.GONE
                     window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                     startActivity(Intent(this, MainActivity::class.java))
+                    finish()
                 }
                 else {
                     binding.loginProgressBar.visibility = View.GONE
@@ -73,7 +74,6 @@ class LoginActivity : AppCompatActivity() {
                 dialogBinding.changePasswordProgressBar.visibility = View.VISIBLE
                 window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
 
-                Log.d("EMAIL", "onCreate: ${dialogBinding.getEmailText.text}")
                 setNewPassword(dialogBinding.getEmailText.text.toString(), dialogBinding, dialog)
             }
             dialogBinding.updatePasswordCancelButton.setOnClickListener { dialog.dismiss() }
