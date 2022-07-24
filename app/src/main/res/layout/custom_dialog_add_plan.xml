@@ -16,7 +16,6 @@
         android:layout_gravity="center"
         android:text="2022년 7월 21일 일정 추가"/>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -54,6 +53,7 @@
             app:layout_constraintTop_toBottomOf="@+id/edit_plan_title" />
 
         <EditText
+            android:id="@+id/edit_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="add description"
