@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.planer.R
 import com.example.planer.databinding.RecyclerItemPlanListBinding
 import com.example.planer.model.PlanDto
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class PlanListRecyclerAdapter(val day: String) : RecyclerView.Adapter<PlanListRecyclerAdapter.ViewHolder>() {
@@ -25,7 +26,7 @@ class PlanListRecyclerAdapter(val day: String) : RecyclerView.Adapter<PlanListRe
 
                 for (res in it.result) {
                     val item = res.toObject(PlanDto::class.java)
-                    if (item.date == day) {
+                    if (item.date == day && item.createUid == FirebaseAuth.getInstance().currentUser?.uid) {
                         planList.add(item)
                         planUidList.add(res.id)
                     } else continue
