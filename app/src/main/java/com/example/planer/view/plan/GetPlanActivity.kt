@@ -12,13 +12,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.planer.R
 import com.example.planer.databinding.ActivityGetPlanBinding
 import com.example.planer.databinding.CustomDialogAddPlanBinding
-import com.example.planer.model.PlanDto
+import com.example.planer.viewmodel.PlanListRecyclerAdapter
 import com.example.planer.viewmodel.PlanViewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
 class GetPlanActivity : AppCompatActivity() {
     private val viewModel: PlanViewModel by viewModels()
@@ -34,11 +33,13 @@ class GetPlanActivity : AppCompatActivity() {
 
         window.statusBarColor = Color.parseColor("#8021F59D")
 
-        binding.addPlanButton.setOnClickListener {
-            val year = intent.getIntExtra("year", 0)
-            val month = intent.getIntExtra("month", 0)
-            val day = intent.getIntExtra("day", 0)
+        val year = intent.getIntExtra("year", 0)
+        val month = intent.getIntExtra("month", 0)
+        val day = intent.getIntExtra("day", 0)
 
+        initRecycler(year, month, day)
+
+        binding.addPlanButton.setOnClickListener {
             val dialogBinding = CustomDialogAddPlanBinding.inflate(LayoutInflater.from(this))
             val dialogBuilder = AlertDialog.Builder(this)
                 .setView(dialogBinding.root)
@@ -68,6 +69,14 @@ class GetPlanActivity : AppCompatActivity() {
                 temp = "plan"
             }
         }
+    }
+
+    private fun initRecycler(year: Int, month: Int, day: Int) {
+        val day = "$year/$month/$day"
+        val adapter = PlanListRecyclerAdapter(day)
+
+        binding.planListRecyclerView.adapter = adapter
+        binding.planListRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
     private fun getPlanBtnText() { temp = "plan" }
