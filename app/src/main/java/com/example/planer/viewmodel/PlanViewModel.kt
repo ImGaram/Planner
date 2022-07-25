@@ -17,31 +17,26 @@ class PlanViewModel: ViewModel() {
         val createUser = auth.currentUser?.uid
         val planList = arrayListOf<PlanDto>()
 
-        setPlanList(planList)
+        database.collection("plans").get().addOnCompleteListener {
+            if (it.isSuccessful) {
+                planList.clear()
 
-        // todo 리스트 size 가져오기
-
-        Log.d("List", "addPlanLogic: ${setPlanList(planList)}")
-        planDto.id = planList.size
-        planDto.title = title
-        planDto.description = description
-        planDto.date = "$year/$month/$day"
-        planDto.createUid = createUser
-        planDto.category = category
-
-        database.collection("plans").document().set(planDto).addOnCompleteListener {
-            result.value = it.isSuccessful
-        }
-    }
-
-    private fun setPlanList(planList: ArrayList<PlanDto>): Int {
-        database.collection("plans").get().addOnSuccessListener {
-            planList.clear()
-            for (data in it) {
-                planList.add(data.toObject(PlanDto::class.java))
+                for (data in it.result) {
+                    planList.add(data.toObject(PlanDto::class.java))
+                }
             }
             Log.d("List", "addOnSuccessListener: ${planList.size}")
+
+            planDto.id = planList.size + 1
+            planDto.title = title
+            planDto.description = description
+            planDto.date = "$year/$month/$day"
+            planDto.createUid = createUser
+            planDto.category = category
+
+            database.collection("plans").document().set(planDto).addOnCompleteListener { task ->
+                result.value = task.isSuccessful
+            }
         }
-        return planList.size
     }
 }
