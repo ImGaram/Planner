@@ -1,6 +1,5 @@
 package com.example.planer.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.planer.model.PlanDto
@@ -25,7 +24,6 @@ class PlanViewModel: ViewModel() {
                     planList.add(data.toObject(PlanDto::class.java))
                 }
             }
-            Log.d("List", "addOnSuccessListener: ${planList.size}")
 
             planDto.id = planList.size + 1
             planDto.title = title
@@ -33,6 +31,8 @@ class PlanViewModel: ViewModel() {
             planDto.date = "$year/$month/$day"
             planDto.createUid = createUser
             planDto.category = category
+            planDto.doneAble = false
+            planDto.favorite = false
 
             database.collection("plans").document().set(planDto).addOnCompleteListener { task ->
                 result.value = task.isSuccessful
