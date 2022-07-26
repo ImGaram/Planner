@@ -13,31 +13,12 @@ import com.example.planer.model.PlanDto
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class PlanListRecyclerAdapter(val day: String) : RecyclerView.Adapter<PlanListRecyclerAdapter.ViewHolder>() {
-    private val planList :ArrayList<PlanDto> = arrayListOf()
-    private val planUidList = arrayListOf<String>()
+class PlanListRecyclerAdapter(
+    val day: String,
+    val planList: ArrayList<PlanDto>,
+    val planUidList: ArrayList<String>
+) : RecyclerView.Adapter<PlanListRecyclerAdapter.ViewHolder>() {
     private val fireStore = FirebaseFirestore.getInstance()
-
-    init {
-        fireStore.collection("plans").get().addOnCompleteListener {
-            if (it.isSuccessful) {
-                planList.clear()
-                planUidList.clear()
-
-                for (res in it.result) {
-                    val item = res.toObject(PlanDto::class.java)
-                    if (item.date == day && item.createUid == FirebaseAuth.getInstance().currentUser?.uid) {
-                        planList.add(item)
-                        planUidList.add(res.id)
-                    } else continue
-                }
-                notifyDataSetChanged()
-            } else {
-                Log.d("FAIL", "initRecycler: ${it.exception}")
-            }
-        }
-
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlanListRecyclerAdapter.ViewHolder {
         val view = RecyclerItemPlanListBinding.inflate(LayoutInflater.from(parent.context), parent, false)

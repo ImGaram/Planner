@@ -16,14 +16,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.planer.R
 import com.example.planer.databinding.ActivityGetPlanBinding
 import com.example.planer.databinding.CustomDialogAddPlanBinding
+import com.example.planer.model.PlanDto
 import com.example.planer.viewmodel.PlanListRecyclerAdapter
 import com.example.planer.viewmodel.PlanViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class GetPlanActivity : AppCompatActivity() {
     private val viewModel: PlanViewModel by viewModels()
     private lateinit var binding: ActivityGetPlanBinding
 
-    var temp = "plan"
+    var category = "plan"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +53,8 @@ class GetPlanActivity : AppCompatActivity() {
 
             dialogBinding.createPlanBtn.setOnClickListener {
                 viewModel.addPlanLogic(dialogBinding.editPlanTitle.text.toString(),
-                    dialogBinding.editDescription.text.toString(), year, month, day, temp)
+                    dialogBinding.editDescription.text.toString(), year, month, day,
+                    category)
                 viewModel.result.observe(this, Observer {
                     when (it) {
                         true -> {
@@ -65,23 +69,46 @@ class GetPlanActivity : AppCompatActivity() {
                 })
 
                 dialog.dismiss()
-                Log.d("Temp", "setCalender: $temp")
-                temp = "plan"
+                Log.d("Temp", "setCalender: $category")
+                category = "plan"
             }
         }
     }
 
     private fun initRecycler(year: Int, month: Int, day: Int) {
-        val day = "$year/$month/$day"
-        val adapter = PlanListRecyclerAdapter(day)
+        val planList :ArrayList<PlanDto> = arrayListOf()
+        val planUidList = arrayListOf<String>()
+        val fireStore = FirebaseFirestore.getInstance()
 
+        val day = "$year/$month/$day"
+        val adapter = PlanListRecyclerAdapter(day, planList, planUidList)
+
+        fireStore.collection("plans").get().addOnCompleteListener {
+            if (it.isSuccessful) {
+                planList.clear()
+                planUidList.clear()
+
+                for (res in it.result) {
+                    val item = res.toObject(PlanDto::class.java)
+                    if (item.date == day && item.createUid == FirebaseAuth.getInstance().currentUser?.uid) {
+                        planList.add(item)
+                        planUidList.add(res.id)
+                    } else continue
+                }
+                adapter.notifyDataSetChanged()
+            }
+            if (planList.size == 0) {
+                binding.planListRecyclerView.visibility = View.GONE
+                binding.noticeNoRecyclerItemText.visibility = View.VISIBLE
+            }
+        }
         binding.planListRecyclerView.adapter = adapter
         binding.planListRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
-    private fun getPlanBtnText() { temp = "plan" }
-    private fun getScheduleBtnText() { temp = "schedule" }
-    private fun getOtherBtnText() { temp = "other" }
+    private fun getPlanBtnText() { category = "plan" }
+    private fun getScheduleBtnText() { category = "schedule" }
+    private fun getOtherBtnText() { category = "other" }
 
     private fun categoryBtnEvent(dialogBinding: CustomDialogAddPlanBinding) {
         val planBtn = dialogBinding.selectCategoryPlanBtn
