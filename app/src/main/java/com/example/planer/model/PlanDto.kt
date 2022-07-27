@@ -5,6 +5,7 @@ data class PlanDto(
     var title: String? = null,
     var description: String? = null,
     var date: String? = null,
+    var dateTime: String? = null,
     var createUid: String? = null,
     var category: String? = null,
     var doneAble: Boolean? = null,

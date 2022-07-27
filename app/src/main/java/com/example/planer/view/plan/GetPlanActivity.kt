@@ -20,12 +20,19 @@ import com.example.planer.model.PlanDto
 import com.example.planer.viewmodel.PlanListRecyclerAdapter
 import com.example.planer.viewmodel.PlanViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.*
+import io.grpc.InternalChannelz.id
 
 class GetPlanActivity : AppCompatActivity() {
     private val viewModel: PlanViewModel by viewModels()
     private lateinit var binding: ActivityGetPlanBinding
 
+    private val database = FirebaseDatabase.getInstance()
+    private val auth = FirebaseAuth.getInstance()
     var category = "plan"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,32 +85,64 @@ class GetPlanActivity : AppCompatActivity() {
     private fun initRecycler(year: Int, month: Int, day: Int) {
         val planList :ArrayList<PlanDto> = arrayListOf()
         val planUidList = arrayListOf<String>()
-        val fireStore = FirebaseFirestore.getInstance()
+
 
         val day = "$year/$month/$day"
-        val adapter = PlanListRecyclerAdapter(day, planList, planUidList)
+        val adapter = PlanListRecyclerAdapter(planList, planUidList, this, day)
 
-        fireStore.collection("plans").get().addOnCompleteListener {
-            if (it.isSuccessful) {
-                planList.clear()
-                planUidList.clear()
-
-                for (res in it.result) {
-                    val item = res.toObject(PlanDto::class.java)
-                    if (item.date == day && item.createUid == FirebaseAuth.getInstance().currentUser?.uid) {
+        database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (datasnapshot in snapshot.children) {
+                    val item = datasnapshot.getValue(PlanDto::class.java)
+                    if (item?.date == day && item.createUid == auth.currentUser?.uid) {
                         planList.add(item)
-                        planUidList.add(res.id)
+                        planUidList.add(item.id.toString())
                     } else continue
                 }
                 adapter.notifyDataSetChanged()
+                Log.d("List", "onDataChange: $planList")
+
+                if (planList.size == 0) {
+                    binding.planListRecyclerView.visibility = View.GONE
+                    binding.noticeNoRecyclerItemText.visibility = View.VISIBLE
+                    binding.countNotCompletedText.text = "아직 일정을 작성하지 않으셨습니다."
+                } else {
+                    getNotCompletedPlan(day)
+                }
             }
-            if (planList.size == 0) {
-                binding.planListRecyclerView.visibility = View.GONE
-                binding.noticeNoRecyclerItemText.visibility = View.VISIBLE
-            }
-        }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
+
+
         binding.planListRecyclerView.adapter = adapter
         binding.planListRecyclerView.layoutManager = LinearLayoutManager(this)
+    }
+
+    fun getNotCompletedPlan(day: String) {
+        val notCompletedList: ArrayList<String> = arrayListOf()
+
+        /*fireStore.collection("plans").get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                notCompletedList.clear()
+
+                for (snapshot in task.result) {
+                    val data = snapshot.toObject(PlanDto::class.java)
+                    if (data.doneAble == false && data.date == day && data.createUid == auth.currentUser?.uid) {
+                        notCompletedList.add(data)
+                        Log.d("List", "getNotCompletedPlan: $data")
+                    } else continue
+                }
+
+                Log.d("List", "getNotCompletedPlan: $notCompletedList")
+                if (notCompletedList.size == 0) {
+                    binding.countNotCompletedText.text = "오늘의 일정을 모두 완료하였습니다!"
+                } else {
+                    binding.countNotCompletedText.text = "아직 완료하지 못한 일이 ${notCompletedList.size}개 있습니다."
+                }
+            }
+
+        }*/
     }
 
     private fun getPlanBtnText() { category = "plan" }
