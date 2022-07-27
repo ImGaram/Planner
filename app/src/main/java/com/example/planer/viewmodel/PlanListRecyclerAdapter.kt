@@ -1,7 +1,6 @@
 package com.example.planer.viewmodel
 
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.CheckBox
@@ -10,15 +9,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.planer.R
 import com.example.planer.databinding.RecyclerItemPlanListBinding
 import com.example.planer.model.PlanDto
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.planer.view.plan.GetPlanActivity
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class PlanListRecyclerAdapter(
-    val day: String,
-    val planList: ArrayList<PlanDto>,
-    val planUidList: ArrayList<String>
+    private val planList: ArrayList<PlanDto>,
+    private val planUidList: ArrayList<String>,
+    private val getPlanActivity: GetPlanActivity,
+    private val day: String
 ) : RecyclerView.Adapter<PlanListRecyclerAdapter.ViewHolder>() {
-    private val fireStore = FirebaseFirestore.getInstance()
+    private val database = FirebaseDatabase.getInstance()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlanListRecyclerAdapter.ViewHolder {
         val view = RecyclerItemPlanListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -36,7 +39,8 @@ class PlanListRecyclerAdapter(
             favoriteEvent(position, holder.favorite)
         }
 
-        holder.checkBox.isChecked = holder.checkBox.isChecked == true
+        if (planList[position].doneAble == true) holder.checkBox.isChecked = true
+        else if (planList[position].doneAble == false) holder.checkBox.isChecked = false
 
         if (planList[position].favorite == true) {
             holder.favorite.setImageResource(R.drawable.favorite_select)
@@ -51,13 +55,12 @@ class PlanListRecyclerAdapter(
 
     inner class ViewHolder(private val binding: RecyclerItemPlanListBinding): RecyclerView.ViewHolder(binding.root) {
         val checkBox = binding.checkBoxPlanDone
-
         val favorite = binding.itemFavoriteSelect
 
         fun bind(item: PlanDto) {
             binding.itemTitleText.text = item.title
             binding.itemDescriptionText.text = item.description
-            binding.itemDayText.text = item.date
+            binding.itemDayText.text = item.dateTime
 
             when (item.category) {
                 "plan" -> {
@@ -74,36 +77,38 @@ class PlanListRecyclerAdapter(
     }
 
     private fun checkBoxEvent(position: Int, checkBox: CheckBox) {
-        val tsDoc = fireStore.collection("plans").document(planUidList[position])
-        fireStore.runTransaction {
-            val planDto = it.get(tsDoc).toObject(PlanDto::class.java)
+        val hash: HashMap<String, Any> = HashMap()
 
-            if (checkBox.isChecked == true) {
-                planDto?.doneAble = true
-                checkBox.isChecked = true
-            } else {
-                planDto?.doneAble = false
-                checkBox.isChecked = false
-            }
-
-            it.set(tsDoc, planDto!!)
+        if (checkBox.isChecked == true) {
+            hash["doneAble"] = true
+            database.getReference("plans").child(planUidList[position]).updateChildren(hash)
+            checkBox.isChecked = true
+        } else {
+            hash["doneAble"] = false
+            database.getReference("plans").child(planUidList[position]).updateChildren(hash)
+            checkBox.isChecked = false
         }
     }
 
     private fun favoriteEvent(position: Int, favorite: ImageButton) {
-        val tsDoc = fireStore.collection("plans").document(planUidList[position])
-        fireStore.runTransaction {
-            val planDto = it.get(tsDoc).toObject(PlanDto::class.java)
+        val hash: HashMap<String, Any> = HashMap()
 
-            if (planDto?.favorite == false) {
-                planDto.favorite = true
-                favorite.setImageResource(R.drawable.favorite_select)
-            } else {
-                planDto?.favorite = false
-                favorite.setImageResource(R.drawable.favorite_unselect)
+        database.getReference("plans").child(planUidList[position]).addListenerForSingleValueEvent(object :ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val data = snapshot.getValue(PlanDto::class.java)
+
+                if (data?.favorite == false) {
+                    hash["favorite"] = true
+                    database.getReference("plans").child(planUidList[position]).updateChildren(hash)
+                    favorite.setImageResource(R.drawable.favorite_select)
+                } else {
+                    hash["favorite"] = false
+                    database.getReference("plans").child(planUidList[position]).updateChildren(hash)
+                    favorite.setImageResource(R.drawable.favorite_unselect)
+                }
             }
 
-            it.set(tsDoc, planDto!!)
-        }
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 }
