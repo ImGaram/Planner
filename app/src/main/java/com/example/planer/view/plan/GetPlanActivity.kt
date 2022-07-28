@@ -120,21 +120,17 @@ class GetPlanActivity : AppCompatActivity() {
     }
 
     fun getNotCompletedPlan(day: String) {
-        val notCompletedList: ArrayList<String> = arrayListOf()
+        val notCompletedList: ArrayList<PlanDto> = arrayListOf()
 
-        /*fireStore.collection("plans").get().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                notCompletedList.clear()
-
-                for (snapshot in task.result) {
-                    val data = snapshot.toObject(PlanDto::class.java)
-                    if (data.doneAble == false && data.date == day && data.createUid == auth.currentUser?.uid) {
-                        notCompletedList.add(data)
-                        Log.d("List", "getNotCompletedPlan: $data")
+        database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (snap in snapshot.children) {
+                    val item = snap.getValue(PlanDto::class.java)
+                    if (item?.doneAble == false && item.date == day && item.createUid == auth.currentUser?.uid) {
+                        notCompletedList.add(item)
                     } else continue
                 }
 
-                Log.d("List", "getNotCompletedPlan: $notCompletedList")
                 if (notCompletedList.size == 0) {
                     binding.countNotCompletedText.text = "오늘의 일정을 모두 완료하였습니다!"
                 } else {
@@ -142,7 +138,8 @@ class GetPlanActivity : AppCompatActivity() {
                 }
             }
 
-        }*/
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
     private fun getPlanBtnText() { category = "plan" }
