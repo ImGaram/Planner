@@ -33,10 +33,12 @@ class PlanListRecyclerAdapter(
 
         holder.checkBox.setOnClickListener {
             checkBoxEvent(position, holder.checkBox)
+            getPlanActivity.getNotCompletedPlan(day)
         }
 
         holder.favorite.setOnClickListener {
             favoriteEvent(position, holder.favorite)
+            getPlanActivity.getNotCompletedPlan(day)
         }
 
         if (planList[position].doneAble == true) holder.checkBox.isChecked = true
