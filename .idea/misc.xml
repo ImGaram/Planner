@@ -10,6 +10,7 @@
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/button_bg3.xml" value="0.139" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/button_bg_select.xml" value="0.139" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/button_bg_unselect.xml" value="0.139" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/category.xml" value="0.139" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/dialog_bg.xml" value="0.139" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/drawer_header_item1.xml" value="0.139" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/edit_text_bg.xml" value="0.139" />
@@ -31,7 +32,7 @@
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/custom_dialog_find_password.xml" value="0.23125" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/custom_dialog_set_plan.xml" value="0.264" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/drawer_header.xml" value="0.2" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/recycler_item_plan_list.xml" value="0.264" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/recycler_item_plan_list.xml" value="0.4013840830449827" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/menu/drawer_menu.xml" value="0.23125" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/xml/string.xml" value="0.18974358974358974" />
       </map>
