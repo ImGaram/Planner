@@ -5,21 +5,20 @@
     <data>
         <variable
             name="planListItem"
-            type="com.example.planer.viewmodel.PlanListRecyclerAdapter" />
+            type="com.example.planer.viewmodel.adapter.PlanListRecyclerAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/recycler_item_bg">
 
         <ImageView
             android:id="@+id/category_color"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/category_color"
+            android:layout_height="wrap_content"
+            android:src="@drawable/category"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -30,7 +29,7 @@
             android:layout_height="wrap_content"
             android:text="title"
             android:textSize="25sp"
-            android:layout_marginTop="13dp"
+            android:layout_marginTop="15dp"
             android:layout_marginStart="30dp"
             app:layout_constraintStart_toEndOf="@+id/category_color"
             app:layout_constraintTop_toTopOf="parent" />

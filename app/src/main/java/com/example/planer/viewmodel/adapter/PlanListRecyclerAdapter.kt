@@ -1,4 +1,4 @@
-package com.example.planer.viewmodel
+package com.example.planer.viewmodel.adapter
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -17,13 +17,13 @@ import com.google.firebase.database.ValueEventListener
 
 class PlanListRecyclerAdapter(
     private val planList: ArrayList<PlanDto>,
-    private val planUidList: ArrayList<String>,
+    private val planNumberList: ArrayList<String>,
     private val getPlanActivity: GetPlanActivity,
     private val day: String
 ) : RecyclerView.Adapter<PlanListRecyclerAdapter.ViewHolder>() {
     private val database = FirebaseDatabase.getInstance()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlanListRecyclerAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = RecyclerItemPlanListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
     }
@@ -83,11 +83,11 @@ class PlanListRecyclerAdapter(
 
         if (checkBox.isChecked == true) {
             hash["doneAble"] = true
-            database.getReference("plans").child(planUidList[position]).updateChildren(hash)
+            database.getReference("plans").child(planNumberList[position]).updateChildren(hash)
             checkBox.isChecked = true
         } else {
             hash["doneAble"] = false
-            database.getReference("plans").child(planUidList[position]).updateChildren(hash)
+            database.getReference("plans").child(planNumberList[position]).updateChildren(hash)
             checkBox.isChecked = false
         }
     }
@@ -95,17 +95,17 @@ class PlanListRecyclerAdapter(
     private fun favoriteEvent(position: Int, favorite: ImageButton) {
         val hash: HashMap<String, Any> = HashMap()
 
-        database.getReference("plans").child(planUidList[position]).addListenerForSingleValueEvent(object :ValueEventListener {
+        database.getReference("plans").child(planNumberList[position]).addListenerForSingleValueEvent(object :ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val data = snapshot.getValue(PlanDto::class.java)
 
                 if (data?.favorite == false) {
                     hash["favorite"] = true
-                    database.getReference("plans").child(planUidList[position]).updateChildren(hash)
+                    database.getReference("plans").child(planNumberList[position]).updateChildren(hash)
                     favorite.setImageResource(R.drawable.favorite_select)
                 } else {
                     hash["favorite"] = false
-                    database.getReference("plans").child(planUidList[position]).updateChildren(hash)
+                    database.getReference("plans").child(planNumberList[position]).updateChildren(hash)
                     favorite.setImageResource(R.drawable.favorite_unselect)
                 }
             }
