@@ -17,15 +17,14 @@ import com.example.planer.R
 import com.example.planer.databinding.ActivityGetPlanBinding
 import com.example.planer.databinding.CustomDialogAddPlanBinding
 import com.example.planer.model.PlanDto
-import com.example.planer.viewmodel.PlanListRecyclerAdapter
 import com.example.planer.viewmodel.PlanViewModel
+import com.example.planer.viewmodel.adapter.FavoriteListRecyclerAdapter
+import com.example.planer.viewmodel.adapter.PlanListRecyclerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.firestore.*
-import io.grpc.InternalChannelz.id
 
 class GetPlanActivity : AppCompatActivity() {
     private val viewModel: PlanViewModel by viewModels()
@@ -48,6 +47,7 @@ class GetPlanActivity : AppCompatActivity() {
         val day = intent.getIntExtra("day", 0)
 
         initRecycler(year, month, day)
+        initFavoriteRecycler(year, month, day)
 
         binding.addPlanButton.setOnClickListener {
             val dialogBinding = CustomDialogAddPlanBinding.inflate(LayoutInflater.from(this))
@@ -86,15 +86,14 @@ class GetPlanActivity : AppCompatActivity() {
         val planList :ArrayList<PlanDto> = arrayListOf()
         val planUidList = arrayListOf<String>()
 
-
-        val day = "$year/$month/$day"
-        val adapter = PlanListRecyclerAdapter(planList, planUidList, this, day)
+        val date = "$year/$month/$day"
+        val adapter = PlanListRecyclerAdapter(planList, planUidList, this, date)
 
         database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (datasnapshot in snapshot.children) {
                     val item = datasnapshot.getValue(PlanDto::class.java)
-                    if (item?.date == day && item.createUid == auth.currentUser?.uid) {
+                    if (item?.date == date && item.createUid == auth.currentUser?.uid) {
                         planList.add(item)
                         planUidList.add(item.id.toString())
                     } else continue
@@ -107,7 +106,7 @@ class GetPlanActivity : AppCompatActivity() {
                     binding.noticeNoRecyclerItemText.visibility = View.VISIBLE
                     binding.countNotCompletedText.text = "아직 일정을 작성하지 않으셨습니다."
                 } else {
-                    getNotCompletedPlan(day)
+                    getNotCompletedPlan(date)
                 }
             }
 
@@ -119,11 +118,52 @@ class GetPlanActivity : AppCompatActivity() {
         binding.planListRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
+    private fun initFavoriteRecycler(year: Int, month: Int, day: Int) {
+        val favoriteList = arrayListOf<PlanDto>()
+        val planNumberList = arrayListOf<String>()
+
+        val date = "$year/$month/$day"
+        val adapter = FavoriteListRecyclerAdapter(favoriteList, planNumberList, this, date)
+
+        getFavoriteList(favoriteList, planNumberList, adapter, date)
+
+        binding.favoriteRecyclerView.adapter = adapter
+        binding.favoriteRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+    }
+
+    fun getFavoriteList(
+        favoriteList: ArrayList<PlanDto>,
+        planNumberList: ArrayList<String>,
+        adapter: FavoriteListRecyclerAdapter,
+        date: String
+    ) {
+        database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                favoriteList.clear()
+
+                for (snap in snapshot.children) {
+                    val item = snap.getValue(PlanDto::class.java)
+                    if (item?.favorite == true && item.date == date && item.createUid == auth.currentUser?.uid) {
+                        favoriteList.add(item)
+                        planNumberList.add(item.id.toString())
+                    } else continue
+                }
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("ERROR", "onCancelled: ${error.details}", error.toException())
+            }
+        })
+    }
+
     fun getNotCompletedPlan(day: String) {
         val notCompletedList: ArrayList<PlanDto> = arrayListOf()
 
         database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                notCompletedList.clear()
+
                 for (snap in snapshot.children) {
                     val item = snap.getValue(PlanDto::class.java)
                     if (item?.doneAble == false && item.date == day && item.createUid == auth.currentUser?.uid) {
@@ -138,7 +178,7 @@ class GetPlanActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onCancelled(error: DatabaseError) {}
+            override fun onCancelled(error: DatabaseError) { Log.e("ERROR", "onCancelled: ${error.details}", error.toException()) }
         })
     }
 
