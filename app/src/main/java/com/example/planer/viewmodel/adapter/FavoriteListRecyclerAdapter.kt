@@ -34,7 +34,7 @@ class FavoriteListRecyclerAdapter(
         holder.checkBox.setOnClickListener {
             checkBoxEvent(position, holder.checkBox)
             getPlanActivity.getNotCompletedPlan(day)
-            getPlanActivity.getFavoriteList(favoritePlanList, planNumberList, this, day)
+            getPlanActivity.getFavoriteList(day)
         }
 
         holder.favorite.setOnClickListener {

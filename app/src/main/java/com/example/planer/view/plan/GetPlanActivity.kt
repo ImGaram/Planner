@@ -82,6 +82,10 @@ class GetPlanActivity : AppCompatActivity() {
         }
     }
 
+    fun a(favoritePlanList: ArrayList<PlanDto>, planNumberList: ArrayList<String>, getPlanActivity: GetPlanActivity, day: String): FavoriteListRecyclerAdapter {
+        return FavoriteListRecyclerAdapter(favoritePlanList, planNumberList, getPlanActivity, day)
+    }
+
     private fun initRecycler(year: Int, month: Int, day: Int) {
         val planList :ArrayList<PlanDto> = arrayListOf()
         val planUidList = arrayListOf<String>()
@@ -123,20 +127,8 @@ class GetPlanActivity : AppCompatActivity() {
         val planNumberList = arrayListOf<String>()
 
         val date = "$year/$month/$day"
-        val adapter = FavoriteListRecyclerAdapter(favoriteList, planNumberList, this, date)
+        val adapter = a(favoriteList, planNumberList, this, date)
 
-        getFavoriteList(favoriteList, planNumberList, adapter, date)
-
-        binding.favoriteRecyclerView.adapter = adapter
-        binding.favoriteRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-    }
-
-    fun getFavoriteList(
-        favoriteList: ArrayList<PlanDto>,
-        planNumberList: ArrayList<String>,
-        adapter: FavoriteListRecyclerAdapter,
-        date: String
-    ) {
         database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 favoriteList.clear()
@@ -149,6 +141,33 @@ class GetPlanActivity : AppCompatActivity() {
                     } else continue
                 }
                 adapter.notifyDataSetChanged()
+
+                if (favoriteList.size == 0) return
+                else getFavoriteList(date)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("ERROR", "onCancelled: ${error.details}", error.toException())
+            }
+        })
+
+        binding.favoriteRecyclerView.adapter = adapter
+        binding.favoriteRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+    }
+
+    fun getFavoriteList(date: String) {
+        val favoriteList = arrayListOf<PlanDto>()
+
+        database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                favoriteList.clear()
+
+                for (snap in snapshot.children) {
+                    val item = snap.getValue(PlanDto::class.java)
+                    if (item?.favorite == true && item.date == date && item.createUid == auth.currentUser?.uid) {
+                        favoriteList.add(item)
+                    } else continue
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
