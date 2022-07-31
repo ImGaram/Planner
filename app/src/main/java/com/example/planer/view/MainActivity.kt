@@ -2,15 +2,20 @@ package com.example.planer.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.AdapterView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.planer.R
 import com.example.planer.databinding.ActivityMainBinding
+import com.example.planer.model.PlanDto
 import com.example.planer.view.plan.GetPlanActivity
 import com.example.planer.view.user.LoginActivity
+import com.example.planer.viewmodel.adapter.MainPlanListRecyclerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -20,6 +25,7 @@ import com.google.firebase.database.ValueEventListener
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val auth = FirebaseAuth.getInstance()
+    private val database = FirebaseDatabase.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +41,8 @@ class MainActivity : AppCompatActivity() {
         val headerView = binding.navigationDrawer.getHeaderView(0)
         getUserName(headerView)
 
+        initRecycler()
+
         val loginBtn = headerView.findViewById<AppCompatButton>(R.id.login_button)
         loginBtn.setOnClickListener {
             if (loginBtn.text.toString() == "로그인") startActivity(Intent(this, LoginActivity::class.java))
@@ -46,6 +54,47 @@ class MainActivity : AppCompatActivity() {
         }
 
         setCalender()
+        setMode()
+    }
+
+    private fun initRecycler() {
+        val plans :ArrayList<PlanDto> = arrayListOf()
+        val adapter = MainPlanListRecyclerAdapter(plans)
+
+        database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (datasnapshot in snapshot.children) {
+                    val item = datasnapshot.getValue(PlanDto::class.java)
+                    if (item!!.createUid == auth.currentUser?.uid) {
+                        plans.add(item)
+                    } else continue
+                }
+                adapter.notifyDataSetChanged()  //
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
+
+        binding.allPlansRecyclerView.adapter = adapter
+        binding.allPlansRecyclerView.layoutManager = LinearLayoutManager(this)
+    }
+
+    private fun setMode() {
+        binding.timeModeSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                when(position) {
+                    0 -> {
+
+                    }
+                    1 -> {
+
+                    }
+                    else -> Log.d("ERROR", "onItemSelected: 오류 발생")
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
+        }
     }
 
     private fun getUserName(headerView: View) {

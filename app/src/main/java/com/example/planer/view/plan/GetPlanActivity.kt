@@ -82,7 +82,7 @@ class GetPlanActivity : AppCompatActivity() {
         }
     }
 
-    fun a(favoritePlanList: ArrayList<PlanDto>, planNumberList: ArrayList<String>, getPlanActivity: GetPlanActivity, day: String): FavoriteListRecyclerAdapter {
+    fun setFavoriteRecycler(favoritePlanList: ArrayList<PlanDto>, planNumberList: ArrayList<String>, getPlanActivity: GetPlanActivity, day: String): FavoriteListRecyclerAdapter {
         return FavoriteListRecyclerAdapter(favoritePlanList, planNumberList, getPlanActivity, day)
     }
 
@@ -127,7 +127,7 @@ class GetPlanActivity : AppCompatActivity() {
         val planNumberList = arrayListOf<String>()
 
         val date = "$year/$month/$day"
-        val adapter = a(favoriteList, planNumberList, this, date)
+        val adapter = setFavoriteRecycler(favoriteList, planNumberList, this, date)
 
         database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
