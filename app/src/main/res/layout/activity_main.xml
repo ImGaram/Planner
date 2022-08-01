@@ -48,14 +48,28 @@
             android:entries="@array/calendar_value"
             android:background="@drawable/spinner_option" />
 
-        <CalendarView
-            android:id="@+id/calendarView"
+        <LinearLayout
+            android:id="@+id/set_spinner_mode_linear"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="338dp"
             android:layout_margin="10dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/time_mode_spinner" />
+            app:layout_constraintTop_toBottomOf="@id/time_mode_spinner">
+
+            <CalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/time_table_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
+
+        </LinearLayout>
 
         <Spinner
             android:id="@+id/category_mode_spinner"
@@ -66,7 +80,8 @@
             android:entries="@array/category"
             android:background="@drawable/spinner_option"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+            app:layout_constraintTop_toBottomOf="@+id/set_spinner_mode_linear" />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/all_plans_recycler_view"
