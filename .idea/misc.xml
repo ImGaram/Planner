@@ -21,11 +21,13 @@
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/logout_btn_layout.xml" value="0.1765" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/spinner_layout.xml" value="0.1455" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/spinner_option.xml" value="0.1455" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/time_bg.xml" value="0.139" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/time_description_bg.xml" value="0.139" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/font/a.xml" value="0.1953125" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/activity_find_password.xml" value="0.23125" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/activity_get_plan.xml" value="0.264" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/activity_login.xml" value="0.23125" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/activity_main.xml" value="0.23125" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/activity_main_page.xml" value="0.264" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/activity_sign_in.xml" value="0.264" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/custom_dialog_add_plan.xml" value="0.23125" />
@@ -34,6 +36,7 @@
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/drawer_header.xml" value="0.2" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/recycler_item_main_plan_list.xml" value="0.23125" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/recycler_item_plan_list.xml" value="0.4013840830449827" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/recycler_item_time_table.xml" value="0.264" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/menu/drawer_menu.xml" value="0.23125" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/xml/string.xml" value="0.18974358974358974" />
       </map>
