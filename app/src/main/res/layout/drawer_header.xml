@@ -34,13 +34,11 @@
                 android:id="@+id/image1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
                 android:background="@drawable/background_document"
                 android:padding="10dp"
                 android:src="@drawable/document"
-                app:layout_constraintStart_toStartOf="@+id/text_user_name"
-                app:layout_constraintTop_toBottomOf="@+id/text_user_name" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/text_total_plans"
@@ -160,5 +158,4 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

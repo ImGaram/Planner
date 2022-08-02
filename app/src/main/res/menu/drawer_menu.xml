@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/create_time_plan"
+        android:icon="@drawable/ic_baseline_calendar_month_24"
+        android:title="일정 생성"/>
 
+    <item android:id="@+id/modify_delete_time_plan"
+        android:icon="@drawable/ic_baseline_edit_calendar_24"
+        android:title="일정 수정, 삭제"/>
 </menu>
