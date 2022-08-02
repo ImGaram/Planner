@@ -53,7 +53,7 @@ class PlanViewModel: ViewModel() {
     private fun getTime(): String {
         val now = System.currentTimeMillis()
         val date = Date(now)
-        val format = SimpleDateFormat("hh:mm:ss", Locale.KOREA)
+        val format = SimpleDateFormat("HH:mm:ss", Locale.KOREA)
         val timeZone = TimeZone.getTimeZone("Asia/Seoul")
         format.timeZone = timeZone
         return format.format(date)
