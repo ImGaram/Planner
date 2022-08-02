@@ -98,8 +98,10 @@
         android:id="@+id/navigation_drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/drawer_main_bg"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/drawer_header"/>
+        app:headerLayout="@layout/drawer_header"
+        app:menu="@menu/drawer_menu"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>

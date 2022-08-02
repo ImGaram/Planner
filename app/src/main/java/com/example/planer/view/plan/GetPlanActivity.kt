@@ -67,6 +67,7 @@ class GetPlanActivity : AppCompatActivity() {
                         true -> {
                             Toast.makeText(this, "일정을 생성하였습니다.", Toast.LENGTH_SHORT).show()
                             dialog.dismiss()
+                            finish()
                         }
                         false -> {
                             Toast.makeText(this, "일정 생성을 실패했습니다.", Toast.LENGTH_SHORT).show()
