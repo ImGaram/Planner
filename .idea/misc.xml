@@ -24,6 +24,7 @@
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/time_bg.xml" value="0.139" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/drawable/time_description_bg.xml" value="0.139" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/font/a.xml" value="0.1953125" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/activity_add_schedule_table.xml" value="0.23125" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/activity_find_password.xml" value="0.23125" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/activity_get_plan.xml" value="0.264" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/activity_login.xml" value="0.23125" />
@@ -31,6 +32,7 @@
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/activity_main_page.xml" value="0.264" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/activity_sign_in.xml" value="0.264" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/custom_dialog_add_plan.xml" value="0.23125" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/custom_dialog_add_schedule.xml" value="0.23020833333333332" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/custom_dialog_find_password.xml" value="0.23125" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/custom_dialog_set_plan.xml" value="0.264" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Planer/app/src/main/res/layout/drawer_header.xml" value="0.2" />

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="일정 추가"
+        android:textSize="35sp"
+        android:layout_margin="10dp"
+        android:layout_gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="15dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="시간"
+            android:layout_marginStart="10dp"
+            android:textSize="20sp"/>
+
+        <TimePicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:timePickerMode="spinner"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/set_schedule_time_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="15dp"
+            android:text="설정하기"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:background="@drawable/button_bg3"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/text_start_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="시작 시간: 오전 10:00"
+                android:textSize="20sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/text_end_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="종료 시간: 오후 12:00"
+                android:textSize="20sp"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="내용"
+            android:textSize="20sp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:hint="일정의 내용"
+            android:singleLine="true"
+            android:lines="1"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/add_schedule_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="완료"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:background="@drawable/button_bg4"/>
+    </LinearLayout>
+</LinearLayout>
