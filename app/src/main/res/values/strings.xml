@@ -11,4 +11,9 @@
         <item>스케줄</item>
         <item>기타</item>
     </string-array>
+
+    <string-array name="time">
+        <item>시작시간</item>
+        <item>종료시간</item>
+    </string-array>
 </resources>
