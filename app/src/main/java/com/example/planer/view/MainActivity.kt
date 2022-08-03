@@ -20,10 +20,12 @@ import com.example.planer.R
 import com.example.planer.databinding.ActivityMainBinding
 import com.example.planer.databinding.CustomDialogAddScheduleBinding
 import com.example.planer.model.PlanDto
+import com.example.planer.model.ScheduleDto
 import com.example.planer.view.plan.GetPlanActivity
 import com.example.planer.view.user.LoginActivity
 import com.example.planer.viewmodel.ScheduleViewModel
 import com.example.planer.viewmodel.adapter.MainPlanListRecyclerAdapter
+import com.example.planer.viewmodel.adapter.TimeTableRecyclerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -54,6 +56,7 @@ class MainActivity : AppCompatActivity() {
         getUserName(headerView)
 
         initRecycler()
+        initScheduleRecycler()
         navigationClick()
 
         val loginBtn = headerView.findViewById<AppCompatButton>(R.id.login_button)
@@ -156,7 +159,7 @@ class MainActivity : AppCompatActivity() {
                         plans.add(item)
                     } else continue
                 }
-                adapter.notifyDataSetChanged()  //
+                adapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {}
@@ -166,17 +169,39 @@ class MainActivity : AppCompatActivity() {
         binding.allPlansRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
+    private fun initScheduleRecycler() {
+        val schedules = arrayListOf<ScheduleDto>()
+        val adapter = TimeTableRecyclerAdapter(schedules)
+
+        database.getReference("schedules").addListenerForSingleValueEvent(object :ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (dataSnapshot in snapshot.children) {
+                    val item = dataSnapshot.getValue(ScheduleDto::class.java)
+                    if (item!!.createUid == auth.currentUser?.uid) {
+                        schedules.add(item)
+                    } else continue
+                }
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
+
+        binding.scheduleRecyclerView.adapter = adapter
+        binding.scheduleRecyclerView.layoutManager = LinearLayoutManager(this)
+    }
+
     private fun setMode() {
         binding.timeModeSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, view: View1?, position: Int, id: Long) {
                 when(position) {
                     0 -> {
                         binding.calendarView.visibility = View1.VISIBLE
-                        binding.timeTableRecyclerView.visibility = View1.GONE
+                        binding.scheduleRecyclerView.visibility = View1.GONE
                     }
                     1 -> {
                         binding.calendarView.visibility = View1.GONE
-                        binding.timeTableRecyclerView.visibility = View1.VISIBLE
+                        binding.scheduleRecyclerView.visibility = View1.VISIBLE
                     }
                     else -> Log.d("ERROR", "onItemSelected: 오류 발생")
                 }
