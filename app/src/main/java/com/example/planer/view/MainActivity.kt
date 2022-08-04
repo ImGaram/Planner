@@ -31,7 +31,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlin.collections.ArrayList
 import android.view.View as View1
 
 class MainActivity : AppCompatActivity() {
@@ -137,6 +136,7 @@ class MainActivity : AppCompatActivity() {
                     true -> {
                         Toast.makeText(this, "일정을 생성하였습니다.", Toast.LENGTH_SHORT).show()
                         dialog.dismiss()
+                        initScheduleRecycler()  // 좋은 방법 찾기
                     }
                     false -> {
                         Toast.makeText(this, "일정을 생성하지 못헀습니다.", Toast.LENGTH_SHORT).show()
@@ -177,7 +177,7 @@ class MainActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (dataSnapshot in snapshot.children) {
                     val item = dataSnapshot.getValue(ScheduleDto::class.java)
-                    if (item!!.createUid == auth.currentUser?.uid) {
+                    if (item!!.createUid == auth.currentUser?.uid && item.uploadDate == viewModel.setTodayTime()) {
                         schedules.add(item)
                     } else continue
                 }
