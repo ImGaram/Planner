@@ -52,6 +52,7 @@
                 app:layout_constraintTop_toTopOf="@+id/image1" />
             <!--        B6B6B6-->
             <TextView
+                android:id="@+id/text_total_plans_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="25"
@@ -136,6 +137,7 @@
                 app:layout_constraintTop_toTopOf="@+id/image3" />
 
             <TextView
+                android:id="@+id/text_doing_plan_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="3"
