@@ -31,7 +31,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import android.view.View as View1
+import android.view.View
+import com.example.planer.viewmodel.PlanViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     private val database = FirebaseDatabase.getInstance()
 
     private val viewModel: ScheduleViewModel by viewModels()
+    private val planViewModel: PlanViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,14 +48,14 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val headerView = binding.navigationDrawer.getHeaderView(0)
+
         binding.imageDrawerOpenBtn.setOnClickListener {
             binding.drawerLayout.openDrawer(GravityCompat.START)
+            planViewModel.setHeaderData(headerView)
         }
 
-        // header 정보 가져오기
-        val headerView = binding.navigationDrawer.getHeaderView(0)
-        getUserName(headerView)
-
+        setHeaderInfo(headerView)   // header 정보 가져오기
         initRecycler()
         initScheduleRecycler()
         navigationClick()
@@ -193,15 +195,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun setMode() {
         binding.timeModeSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, view: View1?, position: Int, id: Long) {
+            override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 when(position) {
                     0 -> {
-                        binding.calendarView.visibility = View1.VISIBLE
-                        binding.scheduleRecyclerView.visibility = View1.GONE
+                        binding.calendarView.visibility = View.VISIBLE
+                        binding.scheduleRecyclerView.visibility = View.GONE
                     }
                     1 -> {
-                        binding.calendarView.visibility = View1.GONE
-                        binding.scheduleRecyclerView.visibility = View1.VISIBLE
+                        binding.calendarView.visibility = View.GONE
+                        binding.scheduleRecyclerView.visibility = View.VISIBLE
                     }
                     else -> Log.d("ERROR", "onItemSelected: 오류 발생")
                 }
@@ -211,7 +213,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getUserName(headerView: View1) {
+    private fun setHeaderInfo(headerView: View) {
         val reference = FirebaseDatabase.getInstance().getReference("Users").child(auth.uid.toString()).child("name")
 
         reference.addValueEventListener(object :ValueEventListener {
