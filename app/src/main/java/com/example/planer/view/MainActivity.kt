@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
         dialogBinding.setTimeModeSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 p0: AdapterView<*>?,
-                view: android.view.View?,
+                view: View?,
                 position: Int,
                 id: Long
             ) {

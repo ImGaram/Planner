@@ -62,14 +62,16 @@ class PlanViewModel: ViewModel() {
         val completedPlan = headerView.findViewById<TextView>(R.id.text_completed_plans_count)
         val doingPlan = headerView.findViewById<TextView>(R.id.text_doing_plan_count)
 
-        database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener {
+        database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener {  // todo 진헹 중인 일정 오늘만 나오게 제한 추가
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (dataSnapshot in snapshot.children) {
                     val item = dataSnapshot.getValue(PlanDto::class.java)
                     if (item!!.createUid == auth.currentUser?.uid) {
                         totalPlanList.add(item)
                         if (item.doneAble == true) completedPlanList.add(item)
-                        else doingList.add(item)
+                        else if (item.doneAble == false && item.date == getDate()) {
+                            doingList.add(item)
+                        }
                     }
                 }
 
@@ -80,6 +82,15 @@ class PlanViewModel: ViewModel() {
 
             override fun onCancelled(error: DatabaseError) {}
         })
+    }
+
+    private fun getDate(): String {
+        val now = System.currentTimeMillis()
+        val date = Date(now)
+        val format = SimpleDateFormat("yyyy/M/dd", Locale.KOREA)
+        val timeZone = TimeZone.getTimeZone("Asia/Seoul")
+        format.timeZone = timeZone
+        return format.format(date)
     }
 
     private fun getTime(): String {
