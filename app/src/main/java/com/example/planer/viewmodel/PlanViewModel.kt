@@ -62,7 +62,7 @@ class PlanViewModel: ViewModel() {
         val completedPlan = headerView.findViewById<TextView>(R.id.text_completed_plans_count)
         val doingPlan = headerView.findViewById<TextView>(R.id.text_doing_plan_count)
 
-        database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener {  // todo 진헹 중인 일정 오늘만 나오게 제한 추가
+        database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (dataSnapshot in snapshot.children) {
                     val item = dataSnapshot.getValue(PlanDto::class.java)
