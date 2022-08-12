@@ -62,7 +62,10 @@ class MainActivity : AppCompatActivity() {
 
         val loginBtn = headerView.findViewById<AppCompatButton>(R.id.login_button)
         loginBtn.setOnClickListener {
-            if (loginBtn.text.toString() == "로그인") startActivity(Intent(this, LoginActivity::class.java))
+            if (loginBtn.text.toString() == "로그인") {
+                startActivity(Intent(this, LoginActivity::class.java))
+                overridePendingTransition(R.anim.top_in, R.anim.none)
+            }
             else if (loginBtn.text.toString() == "로그아웃") {
                 auth.signOut()
                 startActivity(Intent(this, LoginActivity::class.java))
@@ -161,6 +164,11 @@ class MainActivity : AppCompatActivity() {
                         plans.add(item)
                     } else continue
                 }
+                if (plans.size == 0) {
+                    binding.allPlansRecyclerView.visibility = View.GONE
+                    binding.allPlansEmptyText.visibility = View.VISIBLE
+                }
+
                 adapter.notifyDataSetChanged()
             }
 
@@ -183,6 +191,11 @@ class MainActivity : AppCompatActivity() {
                         schedules.add(item)
                     } else continue
                 }
+                if (schedules.size == 0) {
+                    binding.scheduleRecyclerView.visibility = View.GONE
+                    binding.scheduleEmptyText.visibility = View.VISIBLE
+                }
+
                 adapter.notifyDataSetChanged()
             }
 

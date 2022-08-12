@@ -60,7 +60,10 @@ class LoginActivity : AppCompatActivity() {
                 }
             })
         }
-        binding.guestButton.setOnClickListener { finish() }
+        binding.guestButton.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
         binding.forgetPasswordText.setOnClickListener {
             val dialogBinding = CustomDialogFindPasswordBinding.inflate(LayoutInflater.from(this))
             val dialogBuilder = AlertDialog.Builder(this)
