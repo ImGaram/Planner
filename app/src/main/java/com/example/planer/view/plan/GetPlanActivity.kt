@@ -1,5 +1,6 @@
 package com.example.planer.view.plan
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -29,6 +30,7 @@ import com.google.firebase.database.ValueEventListener
 class GetPlanActivity : AppCompatActivity() {
     private val viewModel: PlanViewModel by viewModels()
     private lateinit var binding: ActivityGetPlanBinding
+    var mContext: Context? = null
 
     private val database = FirebaseDatabase.getInstance()
     private val auth = FirebaseAuth.getInstance()
@@ -39,6 +41,7 @@ class GetPlanActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_get_plan)
         binding.getPlan = viewModel
+        mContext = this
 
         window.statusBarColor = Color.parseColor("#8021F59D")
 
@@ -46,8 +49,10 @@ class GetPlanActivity : AppCompatActivity() {
         val month = intent.getIntExtra("month", 0)
         val day = intent.getIntExtra("day", 0)
 
+        val date = "$year/$month/$day"
+
         initRecycler(year, month, day)
-        initFavoriteRecycler(year, month, day)
+        initFavoriteRecycler(date)
 
         binding.addPlanButton.setOnClickListener {
             val dialogBinding = CustomDialogAddPlanBinding.inflate(LayoutInflater.from(this))
@@ -87,10 +92,6 @@ class GetPlanActivity : AppCompatActivity() {
         }
     }
 
-    fun setFavoriteRecycler(favoritePlanList: ArrayList<PlanDto>, planNumberList: ArrayList<String>, getPlanActivity: GetPlanActivity, day: String): FavoriteListRecyclerAdapter {
-        return FavoriteListRecyclerAdapter(favoritePlanList, planNumberList, getPlanActivity, day)
-    }
-
     private fun initRecycler(year: Int, month: Int, day: Int) {
         val planList :ArrayList<PlanDto> = arrayListOf()
         val planUidList = arrayListOf<String>()
@@ -127,12 +128,11 @@ class GetPlanActivity : AppCompatActivity() {
         binding.planListRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
-    private fun initFavoriteRecycler(year: Int, month: Int, day: Int) {
+    fun initFavoriteRecycler(date: String) {
         val favoriteList = arrayListOf<PlanDto>()
         val planNumberList = arrayListOf<String>()
 
-        val date = "$year/$month/$day"
-        val adapter = setFavoriteRecycler(favoriteList, planNumberList, this, date)
+        val adapter = FavoriteListRecyclerAdapter(favoriteList, planNumberList, this, date)
 
         database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

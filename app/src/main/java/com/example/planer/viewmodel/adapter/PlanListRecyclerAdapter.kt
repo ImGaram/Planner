@@ -39,6 +39,7 @@ class PlanListRecyclerAdapter(
         holder.favorite.setOnClickListener {
             favoriteEvent(position, holder.favorite)
             getPlanActivity.getNotCompletedPlan(day)
+            getPlanActivity.initFavoriteRecycler(day)
         }
 
         if (planList[position].doneAble == true) holder.checkBox.isChecked = true
