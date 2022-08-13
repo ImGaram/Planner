@@ -81,6 +81,10 @@ class GetPlanActivity : AppCompatActivity() {
                 category = "plan"
             }
         }
+
+        binding.backMainButton.setOnClickListener {
+            finish()
+        }
     }
 
     fun setFavoriteRecycler(favoritePlanList: ArrayList<PlanDto>, planNumberList: ArrayList<String>, getPlanActivity: GetPlanActivity, day: String): FavoriteListRecyclerAdapter {

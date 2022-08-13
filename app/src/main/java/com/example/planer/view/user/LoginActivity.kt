@@ -35,6 +35,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding.createNewUserButton.setOnClickListener {
             startActivity(Intent(this, SignInActivity::class.java))
+            overridePendingTransition(R.anim.left_out, R.anim.left_in)
         }
 
         binding.mainLoginButton.setOnClickListener {
@@ -49,7 +50,8 @@ class LoginActivity : AppCompatActivity() {
                 if (it == true) {
                     binding.loginProgressBar.visibility = View.GONE
                     window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                    startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, MainActivity::class.java))   // todo
+                    overridePendingTransition(R.anim.top_in, R.anim.none)
                     finish()
                 }
                 else {
@@ -62,6 +64,7 @@ class LoginActivity : AppCompatActivity() {
         }
         binding.guestButton.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
+            overridePendingTransition(R.anim.top_in, R.anim.none)
             finish()
         }
         binding.forgetPasswordText.setOnClickListener {

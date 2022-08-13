@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         setHeaderInfo(headerView)   // header 정보 가져오기
-        initRecycler()
+        initRecycler("all")
         initScheduleRecycler()
         navigationClick()
 
@@ -65,16 +65,19 @@ class MainActivity : AppCompatActivity() {
             if (loginBtn.text.toString() == "로그인") {
                 startActivity(Intent(this, LoginActivity::class.java))
                 overridePendingTransition(R.anim.top_in, R.anim.none)
+                finish()
             }
             else if (loginBtn.text.toString() == "로그아웃") {
                 auth.signOut()
                 startActivity(Intent(this, LoginActivity::class.java))
+                overridePendingTransition(R.anim.top_in, R.anim.none)
                 finish()
             }
         }
 
         setCalender()
         setMode()
+        setAllPlansMode()
     }
 
     private fun navigationClick() {
@@ -152,17 +155,39 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initRecycler() {
+    private fun setAllPlansMode() {
+        binding.categoryModeSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                when(position) {
+                    0 -> initRecycler("all")
+                    1 -> { initRecycler("plan") }
+                    2 -> { initRecycler("schedule") }
+                    3 -> { initRecycler("other") }
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
+        }
+    }
+
+    private fun initRecycler(category: String) {
         val plans :ArrayList<PlanDto> = arrayListOf()
         val adapter = MainPlanListRecyclerAdapter(plans)
 
         database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
+            override fun onDataChange(snapshot: DataSnapshot) {     // todo
                 for (datasnapshot in snapshot.children) {
                     val item = datasnapshot.getValue(PlanDto::class.java)
-                    if (item!!.createUid == auth.currentUser?.uid) {
-                        plans.add(item)
-                    } else continue
+                    Log.d("category", "onDataChange: $category")
+                    if (category == "all") {
+                        if (item!!.createUid == auth.currentUser?.uid) {
+                            plans.add(item)
+                        } else continue
+                    } else {
+                        if (item!!.createUid == auth.currentUser?.uid && item.category == category) {
+                            plans.add(item)
+                        } else continue
+                    }
                 }
                 if (plans.size == 0) {
                     binding.allPlansRecyclerView.visibility = View.GONE
@@ -248,6 +273,7 @@ class MainActivity : AppCompatActivity() {
                 .putExtra("year", year) // int
                 .putExtra("month", month + 1)
                 .putExtra("day", day))
+            overridePendingTransition(R.anim.top_in, R.anim.none)
         }
     }
 
