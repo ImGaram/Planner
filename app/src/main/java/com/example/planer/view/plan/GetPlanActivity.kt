@@ -19,7 +19,7 @@ import com.example.planer.databinding.ActivityGetPlanBinding
 import com.example.planer.databinding.CustomDialogAddPlanBinding
 import com.example.planer.model.PlanDto
 import com.example.planer.viewmodel.PlanViewModel
-import com.example.planer.viewmodel.adapter.FavoriteListRecyclerAdapter
+import com.example.planer.viewmodel.adapter.NotCompletedListRecyclerAdapter
 import com.example.planer.viewmodel.adapter.PlanListRecyclerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -51,10 +51,11 @@ class GetPlanActivity : AppCompatActivity() {
 
         val date = "$year/$month/$day"
 
-        initRecycler(date)
-        initFavoriteRecycler(date)
+        binding.todayTitleText.text = "${month}월 ${day}일 일정"
+        initPlanRecycler(date)
+        initNotCompletedRecycler(date)
 
-        binding.addPlanButton.setOnClickListener {
+        binding.addPlanButton.setOnClickListener {      // 일정 추가를 눌렀을때 나오는 이벤트
             val dialogBinding = CustomDialogAddPlanBinding.inflate(LayoutInflater.from(this))
             val dialogBuilder = AlertDialog.Builder(this)
                 .setView(dialogBinding.root)
@@ -87,14 +88,14 @@ class GetPlanActivity : AppCompatActivity() {
             }
         }
 
-        binding.backMainButton.setOnClickListener {
-            finish()
-        }
+        binding.backMainButton.setOnClickListener { finish() }
     }
 
-    fun initRecycler(date: String) {        // todo
+    fun initPlanRecycler(date: String) {        // 작성된 일정들을 보여주는 recycler adapter 적용
         val planList :ArrayList<PlanDto> = arrayListOf()
         val planUidList = arrayListOf<String>()
+
+        val adapter = PlanListRecyclerAdapter(planList, planUidList, this, date)
 
         database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -105,7 +106,6 @@ class GetPlanActivity : AppCompatActivity() {
                         planUidList.add(item.id.toString())
                     } else continue
                 }
-                val adapter = PlanListRecyclerAdapter(planList, planUidList, this@GetPlanActivity, date)
                 adapter.notifyDataSetChanged()
 
                 if (planList.size == 0) {
@@ -115,45 +115,46 @@ class GetPlanActivity : AppCompatActivity() {
                 } else {
                     getNotCompletedPlan(date)
                 }
-
-                binding.planListRecyclerView.adapter = adapter
-                binding.planListRecyclerView.layoutManager = LinearLayoutManager(this@GetPlanActivity)
             }
 
             override fun onCancelled(error: DatabaseError) {}
         })
+
+        binding.planListRecyclerView.adapter = adapter
+        binding.planListRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
-    fun initFavoriteRecycler(date: String) {    // todo
-        val favoriteList = arrayListOf<PlanDto>()
+    fun initNotCompletedRecycler(date: String) {    // 아직 완료하지 못한 일정들을 보여주는 recycler adapter 적용
+        val notCompletedList = arrayListOf<PlanDto>()
         val planNumberList = arrayListOf<String>()
+
+        val adapter = NotCompletedListRecyclerAdapter(notCompletedList, planNumberList, this, date)
 
         database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                favoriteList.clear()
+                notCompletedList.clear()
                 planNumberList.clear()
 
                 for (snap in snapshot.children) {
                     val item = snap.getValue(PlanDto::class.java)
-                    if (item?.favorite == true && item.date == date && item.createUid == auth.currentUser?.uid) {
-                        favoriteList.add(item)
+                    if (item?.doneAble == false && item.date == date && item.createUid == auth.currentUser?.uid) {
+                        notCompletedList.add(item)
                         planNumberList.add(item.id.toString())
                     } else continue
                 }
-                val adapter = FavoriteListRecyclerAdapter(favoriteList, planNumberList, this@GetPlanActivity, date)
                 adapter.notifyDataSetChanged()
-
-                binding.favoriteRecyclerView.adapter = adapter
-                binding.favoriteRecyclerView.layoutManager = LinearLayoutManager(this@GetPlanActivity, LinearLayoutManager.HORIZONTAL, false)
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.e("ERROR", "onCancelled: ${error.details}", error.toException())
             }
         })
+
+        binding.notCompletedRecyclerView.adapter = adapter
+        binding.notCompletedRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
     }
 
-    fun getNotCompletedPlan(day: String) {
+    fun getNotCompletedPlan(day: String) {  // 아직 완료되지 않은 일정들을 걸러내 text 로 보여주는 함수
         val notCompletedList: ArrayList<PlanDto> = arrayListOf()
 
         database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener {
@@ -178,11 +179,12 @@ class GetPlanActivity : AppCompatActivity() {
         })
     }
 
+    // 카테고리 여부를 알려주는 함수들
     private fun getPlanBtnText() { category = "plan" }
     private fun getScheduleBtnText() { category = "schedule" }
     private fun getOtherBtnText() { category = "other" }
 
-    private fun categoryBtnEvent(dialogBinding: CustomDialogAddPlanBinding) {
+    private fun categoryBtnEvent(dialogBinding: CustomDialogAddPlanBinding) {   // 카테고리 버튼을 눌렀을때 호출되는 함수
         val planBtn = dialogBinding.selectCategoryPlanBtn
         val scheduleBtn = dialogBinding.setCategoryScheduleBtn
         val otherBtn = dialogBinding.selectCategoryOtherBtn

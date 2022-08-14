@@ -24,12 +24,12 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/today_title_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:text="즐겨찾기한 일정"
+                android:text="8월 14일 일정"
                 android:textColor="@color/white"
                 android:textSize="25sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -42,9 +42,9 @@
                 android:layout_marginEnd="20sp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_baseline_arrow_back_ios_new_24"
-                app:layout_constraintBottom_toBottomOf="@+id/textView5"
+                app:layout_constraintBottom_toBottomOf="@+id/today_title_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView5" />
+                app:layout_constraintTop_toTopOf="@+id/today_title_text" />
 
             <TextView
                 android:id="@+id/count_not_completed_text"
@@ -57,10 +57,10 @@
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+                app:layout_constraintTop_toBottomOf="@+id/today_title_text" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/favorite_recycler_view"
+                android:id="@+id/not_completed_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginStart="15dp"

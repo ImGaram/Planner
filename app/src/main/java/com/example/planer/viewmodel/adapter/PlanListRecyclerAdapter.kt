@@ -4,7 +4,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.planer.R
 import com.example.planer.databinding.RecyclerItemPlanListBinding
@@ -34,12 +34,13 @@ class PlanListRecyclerAdapter(
         holder.checkBox.setOnClickListener {
             checkBoxEvent(position, holder.checkBox)
             getPlanActivity.getNotCompletedPlan(day)
+            getPlanActivity.initNotCompletedRecycler(day)
         }
 
         holder.favorite.setOnClickListener {
             favoriteEvent(position, holder.favorite)
             getPlanActivity.getNotCompletedPlan(day)
-            getPlanActivity.initFavoriteRecycler(day)
+            getPlanActivity.initNotCompletedRecycler(day)
         }
 
         if (planList[position].doneAble == true) holder.checkBox.isChecked = true
@@ -47,7 +48,7 @@ class PlanListRecyclerAdapter(
 
         if (planList[position].favorite == true) {
             holder.favorite.setImageResource(R.drawable.favorite_select)
-        } else {
+        } else if (planList[position].favorite == false) {
             holder.favorite.setImageResource(R.drawable.favorite_unselect)
         }
     }
@@ -93,21 +94,21 @@ class PlanListRecyclerAdapter(
         }
     }
 
-    private fun favoriteEvent(position: Int, favorite: ImageButton) {
+    private fun favoriteEvent(position: Int, favorite: ImageView) {
         val hash: HashMap<String, Any> = HashMap()
 
         database.getReference("plans").child(planNumberList[position]).addListenerForSingleValueEvent(object :ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val data = snapshot.getValue(PlanDto::class.java)
 
-                if (data?.favorite == false) {
-                    hash["favorite"] = true
-                    database.getReference("plans").child(planNumberList[position]).updateChildren(hash)
-                    favorite.setImageResource(R.drawable.favorite_select)
-                } else {
+                if (data?.favorite == true) {
                     hash["favorite"] = false
                     database.getReference("plans").child(planNumberList[position]).updateChildren(hash)
                     favorite.setImageResource(R.drawable.favorite_unselect)
+                } else {
+                    hash["favorite"] = true
+                    database.getReference("plans").child(planNumberList[position]).updateChildren(hash)
+                    favorite.setImageResource(R.drawable.favorite_select)
                 }
             }
 
