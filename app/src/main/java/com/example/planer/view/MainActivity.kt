@@ -212,7 +212,7 @@ class MainActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (dataSnapshot in snapshot.children) {
                     val item = dataSnapshot.getValue(ScheduleDto::class.java)
-                    if (item!!.createUid == auth.currentUser?.uid && item.uploadDate == viewModel.setTodayTime()) {
+                    if (item!!.createUid == auth.currentUser?.uid && item.uploadDate == viewModel.setToday()) {
                         schedules.add(item)
                     } else continue
                 }

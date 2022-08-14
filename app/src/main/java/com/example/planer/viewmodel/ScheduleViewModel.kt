@@ -3,7 +3,6 @@ package com.example.planer.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.planer.model.ScheduleDto
-import com.example.planer.viewmodel.adapter.TimeTableRecyclerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -33,7 +32,7 @@ class ScheduleViewModel: ViewModel() {
                 scheduleDto.id = scheduleList.size + 1
                 scheduleDto.createUid = auth.currentUser?.uid
                 scheduleDto.startTime = startTime
-                scheduleDto.uploadDate = setTodayTime()
+                scheduleDto.uploadDate = setToday()
                 scheduleDto.endTime = endTime
                 scheduleDto.description = description
 
@@ -46,10 +45,10 @@ class ScheduleViewModel: ViewModel() {
         })
     }
 
-    fun setTodayTime(): String {
+    fun setToday(): String {
         val now = System.currentTimeMillis()
         val date = Date(now)
-        val format = SimpleDateFormat("yyyy/MM/dd E", Locale.KOREA)
+        val format = SimpleDateFormat("E", Locale.KOREA)
 
         return format.format(date)
     }
