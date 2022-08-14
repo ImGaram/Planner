@@ -51,7 +51,7 @@ class GetPlanActivity : AppCompatActivity() {
 
         val date = "$year/$month/$day"
 
-        initRecycler(year, month, day)
+        initRecycler(date)
         initFavoriteRecycler(date)
 
         binding.addPlanButton.setOnClickListener {
@@ -92,12 +92,9 @@ class GetPlanActivity : AppCompatActivity() {
         }
     }
 
-    private fun initRecycler(year: Int, month: Int, day: Int) {
+    fun initRecycler(date: String) {        // todo
         val planList :ArrayList<PlanDto> = arrayListOf()
         val planUidList = arrayListOf<String>()
-
-        val date = "$year/$month/$day"
-        val adapter = PlanListRecyclerAdapter(planList, planUidList, this, date)
 
         database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -108,8 +105,8 @@ class GetPlanActivity : AppCompatActivity() {
                         planUidList.add(item.id.toString())
                     } else continue
                 }
+                val adapter = PlanListRecyclerAdapter(planList, planUidList, this@GetPlanActivity, date)
                 adapter.notifyDataSetChanged()
-                Log.d("List", "onDataChange: $planList")
 
                 if (planList.size == 0) {
                     binding.planListRecyclerView.visibility = View.GONE
@@ -118,25 +115,23 @@ class GetPlanActivity : AppCompatActivity() {
                 } else {
                     getNotCompletedPlan(date)
                 }
+
+                binding.planListRecyclerView.adapter = adapter
+                binding.planListRecyclerView.layoutManager = LinearLayoutManager(this@GetPlanActivity)
             }
 
             override fun onCancelled(error: DatabaseError) {}
         })
-
-
-        binding.planListRecyclerView.adapter = adapter
-        binding.planListRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
-    fun initFavoriteRecycler(date: String) {
+    fun initFavoriteRecycler(date: String) {    // todo
         val favoriteList = arrayListOf<PlanDto>()
         val planNumberList = arrayListOf<String>()
-
-        val adapter = FavoriteListRecyclerAdapter(favoriteList, planNumberList, this, date)
 
         database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 favoriteList.clear()
+                planNumberList.clear()
 
                 for (snap in snapshot.children) {
                     val item = snap.getValue(PlanDto::class.java)
@@ -145,34 +140,11 @@ class GetPlanActivity : AppCompatActivity() {
                         planNumberList.add(item.id.toString())
                     } else continue
                 }
+                val adapter = FavoriteListRecyclerAdapter(favoriteList, planNumberList, this@GetPlanActivity, date)
                 adapter.notifyDataSetChanged()
 
-                if (favoriteList.size == 0) return
-                else getFavoriteList(date)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("ERROR", "onCancelled: ${error.details}", error.toException())
-            }
-        })
-
-        binding.favoriteRecyclerView.adapter = adapter
-        binding.favoriteRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-    }
-
-    fun getFavoriteList(date: String) {
-        val favoriteList = arrayListOf<PlanDto>()
-
-        database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                favoriteList.clear()
-
-                for (snap in snapshot.children) {
-                    val item = snap.getValue(PlanDto::class.java)
-                    if (item?.favorite == true && item.date == date && item.createUid == auth.currentUser?.uid) {
-                        favoriteList.add(item)
-                    } else continue
-                }
+                binding.favoriteRecyclerView.adapter = adapter
+                binding.favoriteRecyclerView.layoutManager = LinearLayoutManager(this@GetPlanActivity, LinearLayoutManager.HORIZONTAL, false)
             }
 
             override fun onCancelled(error: DatabaseError) {

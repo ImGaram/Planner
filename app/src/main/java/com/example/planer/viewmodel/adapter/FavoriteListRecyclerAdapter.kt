@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.planer.R
 import com.example.planer.databinding.RecyclerItemPlanListBinding
@@ -15,6 +16,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
+// todo 완료 안된것들 확인하는 것으로 변경(최후의 수단)
 class FavoriteListRecyclerAdapter(
     private val favoritePlanList: ArrayList<PlanDto>,
     private val planNumberList: ArrayList<String>,
@@ -34,13 +36,13 @@ class FavoriteListRecyclerAdapter(
         holder.checkBox.setOnClickListener {
             checkBoxEvent(position, holder.checkBox)
             getPlanActivity.getNotCompletedPlan(day)
-            getPlanActivity.getFavoriteList(day)
+            getPlanActivity.initRecycler(day)
         }
 
         holder.favorite.setOnClickListener {
             favoriteEvent(position, holder.favorite)
             getPlanActivity.getNotCompletedPlan(day)
-            getPlanActivity.initFavoriteRecycler(day)
+            getPlanActivity.initRecycler(day)
         }
 
         if (favoritePlanList[position].doneAble == true) holder.checkBox.isChecked = true
@@ -48,7 +50,7 @@ class FavoriteListRecyclerAdapter(
 
         if (favoritePlanList[position].favorite == true) {
             holder.favorite.setImageResource(R.drawable.favorite_select)
-        } else {
+        } else if (favoritePlanList[position].favorite == false) {
             holder.favorite.setImageResource(R.drawable.favorite_unselect)
         }
     }
@@ -94,7 +96,7 @@ class FavoriteListRecyclerAdapter(
         }
     }
 
-    private fun favoriteEvent(position: Int, favorite: ImageButton) {
+    private fun favoriteEvent(position: Int, favorite: ImageView) {
         val hash: HashMap<String, Any> = HashMap()
 
         database.getReference("plans").child(planNumberList[position]).addListenerForSingleValueEvent(object :
