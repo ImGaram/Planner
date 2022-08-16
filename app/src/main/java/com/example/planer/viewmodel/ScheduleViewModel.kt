@@ -29,7 +29,7 @@ class ScheduleViewModel: ViewModel() {
                     }
                 }
 
-                scheduleDto.id = scheduleList.size + 1
+                scheduleDto.id = scheduleList.last().id!! + 1
                 scheduleDto.createUid = auth.currentUser?.uid
                 scheduleDto.startTime = startTime
                 scheduleDto.uploadDate = setToday()

@@ -35,7 +35,7 @@ class PlanViewModel: ViewModel() {
                     }
                 }
 
-                planDto.id = planList.size + 1
+                planDto.id = planList.last().id!! + 1   // last(): arraylist의 가장 마지막 값을 가져옴
                 planDto.title = title
                 planDto.description = description
                 planDto.date = "$year/$month/$day"
