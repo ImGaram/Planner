@@ -44,6 +44,7 @@ class PlanViewModel: ViewModel() {
                 planDto.category = category
                 planDto.doneAble = false
                 planDto.favorite = false
+                planDto.deleteAble = false
 
                 database.getReference("plans").child(planDto.id.toString()).setValue(planDto).addOnCompleteListener { task ->
                     result.value = task.isSuccessful

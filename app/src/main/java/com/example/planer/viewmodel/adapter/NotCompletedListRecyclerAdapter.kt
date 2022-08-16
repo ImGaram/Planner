@@ -10,7 +10,6 @@ import com.example.planer.model.PlanDto
 import com.example.planer.view.plan.GetPlanActivity
 import com.google.firebase.database.FirebaseDatabase
 
-// todo 완료 안된것들 확인하는 것으로 변경(최후의 수단)
 class NotCompletedListRecyclerAdapter(
     private val favoritePlanList: ArrayList<PlanDto>,
     private val planNumberList: ArrayList<String>,

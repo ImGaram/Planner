@@ -32,6 +32,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import android.view.View
+import com.example.planer.view.plan.DeletePlanActivity
 import com.example.planer.viewmodel.PlanViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -83,11 +84,15 @@ class MainActivity : AppCompatActivity() {
     private fun navigationClick() {
         binding.navigationDrawer.setNavigationItemSelectedListener {
             when(it.itemId) {
-                R.id.create_time_plan -> {
+                R.id.create_time_schedule -> {
                     dialogLogic()
                 }
-                R.id.modify_delete_time_plan -> {
-                    Toast.makeText(this, "modify_delete_time_plan", Toast.LENGTH_SHORT).show()
+                R.id.modify_delete_time_schedule -> {
+                    startActivity(Intent(this, DeletePlanActivity::class.java))
+                    overridePendingTransition(R.anim.right_in, R.anim.right_out)
+                }
+                R.id.delete_plan -> {
+                    Toast.makeText(this, "delete_plan", Toast.LENGTH_SHORT).show()
                 }
             }
             return@setNavigationItemSelectedListener true
