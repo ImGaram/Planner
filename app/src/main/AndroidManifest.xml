@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Planer"
         tools:targetApi="31">
         <activity
+            android:name=".view.plan.DeletePlanActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.plan.GetPlanActivity"
             android:exported="false" />
         <activity
