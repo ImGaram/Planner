@@ -89,7 +89,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.modify_delete_time_schedule -> {
                     startActivity(Intent(this, DeletePlanActivity::class.java))
-                    overridePendingTransition(R.anim.right_in, R.anim.right_out)
                 }
                 R.id.delete_plan -> {
                     Toast.makeText(this, "delete_plan", Toast.LENGTH_SHORT).show()

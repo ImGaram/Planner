@@ -1,9 +1,8 @@
 package com.example.planer.view.plan
 
-import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.planer.R
@@ -20,17 +19,19 @@ import com.google.firebase.database.ValueEventListener
 class DeletePlanActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDeletePlanBinding
     private val auth = FirebaseAuth.getInstance()
-    private val dateBase = FirebaseDatabase.getInstance()
+    private val dataBase = FirebaseDatabase.getInstance()
     private val viewModel by viewModels<PlanViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.statusBarColor = Color.parseColor("#8021F59D")
         binding = DataBindingUtil.setContentView(this, R.layout.activity_delete_plan)
         binding.deletePlan = viewModel
 
         initRecycler()
+
+        binding.backArrowToMainImage.setOnClickListener { finish() }
+        binding.deletePlanImage.setOnClickListener { deletePlanLogic() }
     }
 
     private fun initRecycler() {
@@ -38,7 +39,7 @@ class DeletePlanActivity : AppCompatActivity() {
         val deleteNumList = arrayListOf<String>()
         val adapter = DeletePlanRecyclerAdapter(deleteList, deleteNumList)
 
-        dateBase.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener {
+        dataBase.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 deleteList.clear()
                 deleteNumList.clear()
@@ -58,5 +59,21 @@ class DeletePlanActivity : AppCompatActivity() {
 
         binding.deleteListRecyclerView.adapter = adapter
         binding.deleteListRecyclerView.layoutManager = LinearLayoutManager(this)
+    }
+
+    private fun deletePlanLogic() {
+        dataBase.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (dataSnapShot in snapshot.children) {
+                    val item = dataSnapShot.getValue(PlanDto::class.java)
+                    if (item?.deleteAble == true) {
+                        dataBase.getReference("plans").child(item.id.toString()).removeValue()
+                    } else continue
+                }
+                initRecycler()
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 }
