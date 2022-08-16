@@ -9,5 +9,6 @@ data class PlanDto(
     var createUid: String? = null,
     var category: String? = null,
     var doneAble: Boolean? = null,
-    var favorite: Boolean? = null
+    var favorite: Boolean? = null,
+    var deleteAble: Boolean? = null
 )
