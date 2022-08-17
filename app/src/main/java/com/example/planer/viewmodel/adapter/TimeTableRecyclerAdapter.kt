@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.planer.databinding.RecyclerItemTimeTableBinding
-import com.example.planer.model.ScheduleDto
+import com.example.planer.model.TimeTableDto
 
-class TimeTableRecyclerAdapter(val timeList: ArrayList<ScheduleDto>): RecyclerView.Adapter<TimeTableRecyclerAdapter.ViewHolder>() {
+class TimeTableRecyclerAdapter(val timeList: ArrayList<TimeTableDto>): RecyclerView.Adapter<TimeTableRecyclerAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = RecyclerItemTimeTableBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
@@ -21,7 +21,7 @@ class TimeTableRecyclerAdapter(val timeList: ArrayList<ScheduleDto>): RecyclerVi
     }
 
     inner class ViewHolder(val binding: RecyclerItemTimeTableBinding): RecyclerView.ViewHolder(binding.root) {
-        fun setView(item: ScheduleDto) {
+        fun setView(item: TimeTableDto) {
             binding.itemSetTimeText.text = "${item.startTime} > ${item.endTime}"
             binding.itemTimeDoText.text = item.description
         }
