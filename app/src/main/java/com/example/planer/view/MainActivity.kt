@@ -20,10 +20,10 @@ import com.example.planer.R
 import com.example.planer.databinding.ActivityMainBinding
 import com.example.planer.databinding.CustomDialogAddScheduleBinding
 import com.example.planer.model.PlanDto
-import com.example.planer.model.ScheduleDto
+import com.example.planer.model.TimeTableDto
 import com.example.planer.view.plan.GetPlanActivity
 import com.example.planer.view.user.LoginActivity
-import com.example.planer.viewmodel.ScheduleViewModel
+import com.example.planer.viewmodel.TimeTableViewModel
 import com.example.planer.viewmodel.adapter.MainPlanListRecyclerAdapter
 import com.example.planer.viewmodel.adapter.TimeTableRecyclerAdapter
 import com.google.firebase.auth.FirebaseAuth
@@ -33,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import android.view.View
 import com.example.planer.view.plan.DeletePlanActivity
+import com.example.planer.view.plan.DeleteTimeTablePlanActivity
 import com.example.planer.viewmodel.PlanViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     private val auth = FirebaseAuth.getInstance()
     private val database = FirebaseDatabase.getInstance()
 
-    private val viewModel: ScheduleViewModel by viewModels()
+    private val viewModel: TimeTableViewModel by viewModels()
     private val planViewModel: PlanViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,8 +91,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.modify_delete_time_schedule -> {
                     startActivity(Intent(this, DeletePlanActivity::class.java))
                 }
-                R.id.delete_plan -> {
-                    Toast.makeText(this, "delete_plan", Toast.LENGTH_SHORT).show()
+                R.id.delete_time_table_plan -> {
+                    startActivity(Intent(this, DeleteTimeTablePlanActivity::class.java))
                 }
             }
             return@setNavigationItemSelectedListener true
@@ -209,13 +210,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initScheduleRecycler() {
-        val schedules = arrayListOf<ScheduleDto>()
+        val schedules = arrayListOf<TimeTableDto>()
         val adapter = TimeTableRecyclerAdapter(schedules)
 
         database.getReference("schedules").addListenerForSingleValueEvent(object :ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (dataSnapshot in snapshot.children) {
-                    val item = dataSnapshot.getValue(ScheduleDto::class.java)
+                    val item = dataSnapshot.getValue(TimeTableDto::class.java)
                     if (item!!.createUid == auth.currentUser?.uid && item.uploadDate == viewModel.setToday()) {
                         schedules.add(item)
                     } else continue
