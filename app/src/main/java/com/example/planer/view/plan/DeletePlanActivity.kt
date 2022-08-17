@@ -1,6 +1,7 @@
 package com.example.planer.view.plan
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -67,7 +68,9 @@ class DeletePlanActivity : AppCompatActivity() {
                 for (dataSnapShot in snapshot.children) {
                     val item = dataSnapShot.getValue(PlanDto::class.java)
                     if (item?.deleteAble == true) {
-                        dataBase.getReference("plans").child(item.id.toString()).removeValue()
+                        dataBase.getReference("plans").child(item.id.toString()).removeValue().addOnCompleteListener {
+                            Toast.makeText(this@DeletePlanActivity, "일정을 삭제했습니다.", Toast.LENGTH_SHORT).show()
+                        }
                     } else continue
                 }
                 initRecycler()

@@ -8,7 +8,7 @@
         android:icon="@drawable/ic_baseline_edit_calendar_24"
         android:title="일정 수정, 삭제"/>
 
-    <item android:id="@+id/delete_plan"
+    <item android:id="@+id/delete_time_table_plan"
         android:icon="@drawable/ic_baseline_delete_outline_24"
-        android:title="계획 삭제"/>
+        android:title="시간표 일정 삭제"/>
 </menu>
