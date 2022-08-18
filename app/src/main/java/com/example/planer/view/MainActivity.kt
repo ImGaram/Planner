@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.AdapterView
 import android.widget.TextView
 import android.widget.Toast
@@ -18,11 +19,14 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.planer.R
 import com.example.planer.databinding.ActivityMainBinding
-import com.example.planer.databinding.CustomDialogAddScheduleBinding
+import com.example.planer.databinding.CustomDialogAddTimeTableBinding
 import com.example.planer.model.PlanDto
 import com.example.planer.model.TimeTableDto
+import com.example.planer.view.plan.DeletePlanActivity
+import com.example.planer.view.plan.DeleteTimeTablePlanActivity
 import com.example.planer.view.plan.GetPlanActivity
 import com.example.planer.view.user.LoginActivity
+import com.example.planer.viewmodel.PlanViewModel
 import com.example.planer.viewmodel.TimeTableViewModel
 import com.example.planer.viewmodel.adapter.MainPlanListRecyclerAdapter
 import com.example.planer.viewmodel.adapter.TimeTableRecyclerAdapter
@@ -31,10 +35,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import android.view.View
-import com.example.planer.view.plan.DeletePlanActivity
-import com.example.planer.view.plan.DeleteTimeTablePlanActivity
-import com.example.planer.viewmodel.PlanViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun dialogLogic() {
-        val dialogBinding = CustomDialogAddScheduleBinding.inflate(LayoutInflater.from(this))
+        val dialogBinding = CustomDialogAddTimeTableBinding.inflate(LayoutInflater.from(this))
         val dialogBuilder = AlertDialog.Builder(this)
             .setView(dialogBinding.root)
         val dialog = dialogBuilder.show()
@@ -115,16 +115,20 @@ class MainActivity : AppCompatActivity() {
             ) {
                 when(position) {
                     0 -> {  // 시작시간
-                        dialogBinding.setScheduleTimePicker.setOnTimeChangedListener { timePicker, hour, minute ->
+                        dialogBinding.setScheduleTimePicker.setOnTimeChangedListener { _, hour, minute ->
                             if (hour > 12) {
-                                dialogBinding.textStartTime.text = "pm ${hour - 12}: $minute"
+                                if (minute < 10) {
+                                    dialogBinding.textStartTime.text = "pm ${hour - 12}: 0${minute}"
+                                } else dialogBinding.textStartTime.text = "pm ${hour - 12}: $minute"
                             } else {
-                                dialogBinding.textStartTime.text = "am ${hour}: $minute"
+                                if (minute < 10) {
+                                    dialogBinding.textStartTime.text = "am ${hour - 12}: 0${minute}"
+                                } else dialogBinding.textStartTime.text = "am ${hour}: $minute"
                             }
                         }
                     }
                     1 -> {  // 종료 시간
-                        dialogBinding.setScheduleTimePicker.setOnTimeChangedListener { timePicker, hour, minute ->
+                        dialogBinding.setScheduleTimePicker.setOnTimeChangedListener { _, hour, minute ->
                             if (hour > 12) {
                                 dialogBinding.textEndTime.text = "pm ${hour - 12}: $minute"
                             } else {
@@ -273,7 +277,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setCalender() {
-        binding.calendarView.setOnDateChangeListener { calendarView, year, month, day ->
+        binding.calendarView.setOnDateChangeListener { _, year, month, day ->
             startActivity(Intent(this, GetPlanActivity::class.java)
                 .putExtra("year", year) // int
                 .putExtra("month", month + 1)
