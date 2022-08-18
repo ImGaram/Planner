@@ -2,6 +2,7 @@ package com.example.planer.view.plan
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +28,11 @@ class DeleteTimeTablePlanActivity : AppCompatActivity() {
         binding.deleteTimeTable = viewModel
 
         initRecycler()
+
+        binding.backMainButton2.setOnClickListener { finish() }
+        binding.deleteTimeTablePlans.setOnClickListener {
+            deleteTimeTableLogic()
+        }
     }
 
     private fun initRecycler() {
@@ -52,5 +58,23 @@ class DeleteTimeTablePlanActivity : AppCompatActivity() {
 
         binding.deleteTimeTablePlanRecyclerView.adapter = adapter
         binding.deleteTimeTablePlanRecyclerView.layoutManager = LinearLayoutManager(this)
+    }
+
+    private fun deleteTimeTableLogic() {
+        database.getReference("schedules").addListenerForSingleValueEvent(object :ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (dataSnapshot in snapshot.children) {
+                    val item = dataSnapshot.getValue(TimeTableDto::class.java)
+                    if (item?.deleteAble == true) {
+                        database.getReference("schedules").child(item.id.toString()).removeValue().addOnCompleteListener {
+                            Toast.makeText(this@DeleteTimeTablePlanActivity, "일정을 삭제했습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                    } else continue
+                }
+                initRecycler()
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 }
