@@ -39,8 +39,7 @@ class DeleteTimeTableRecyclerAdapter(
 
         fun setView(data: TimeTableDto) {
             binding.deleteTimeTableDescriptionText.text = data.description
-            binding.deleteTimeTableStartTimeText.text = data.startTime
-            binding.deleteTimeTableEndTimeText.text = " > ${data.endTime}"
+            binding.deleteTimeTableStartTimeText.text = "${data.startTime} > ${data.endTime}"
         }
     }
 
