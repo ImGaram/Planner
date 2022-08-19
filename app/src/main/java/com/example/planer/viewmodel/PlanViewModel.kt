@@ -85,7 +85,7 @@ class PlanViewModel: ViewModel() {
         })
     }
 
-    private fun getDate(): String {
+    fun getDate(): String {
         val now = System.currentTimeMillis()
         val date = Date(now)
         val format = SimpleDateFormat("yyyy/M/dd", Locale.KOREA)
