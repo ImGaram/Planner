@@ -1,9 +1,16 @@
 package com.example.planer.view
 
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +21,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,6 +44,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -61,6 +73,7 @@ class MainActivity : AppCompatActivity() {
         initRecycler("all")
         initScheduleRecycler()
         navigationClick()
+        sendNotification()
 
         val loginBtn = headerView.findViewById<AppCompatButton>(R.id.login_button)
         loginBtn.setOnClickListener {
@@ -80,6 +93,37 @@ class MainActivity : AppCompatActivity() {
         setCalender()
         setMode()
         setAllPlansMode()
+    }
+
+    private fun setNotification(notCompletePlansCount: Int) {
+        val channelId = "my_channel"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channelId, "일정", importance).apply {
+                description = "daily schedule"
+            }
+
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+            val intent = Intent(this, GetPlanActivity::class.java)
+                .putExtra("year", planViewModel.getDate().substring(0 until 4))
+                .putExtra("month", planViewModel.getDate().substring(5 until 6))
+                .putExtra("day", planViewModel.getDate().substring(7 until 9))
+            val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
+            val notificationBuilder = NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.drawable.ic_baseline_calendar_month_24) // small icon
+                .setContentTitle("남은 할일")   // 타이틀
+                .setContentText("아직 완료하지 못한 일이 ${notCompletePlansCount}개 남았어요!")    // 내용
+                .setAutoCancel(true)    // 알림 클릭시 알림 제거 여부
+                .setContentIntent(pendingIntent)    // 알림 클릭시 pendingIntent 의 activity 로 이동
+
+            val notificationBuilderId = 100
+            NotificationManagerCompat.from(this).apply {
+                notify(notificationBuilderId, notificationBuilder.build())
+            }
+        }
     }
 
     private fun navigationClick() {
@@ -130,9 +174,13 @@ class MainActivity : AppCompatActivity() {
                     1 -> {  // 종료 시간
                         dialogBinding.setScheduleTimePicker.setOnTimeChangedListener { _, hour, minute ->
                             if (hour > 12) {
-                                dialogBinding.textEndTime.text = "pm ${hour - 12}: $minute"
+                                if (minute < 10) {
+                                    dialogBinding.textEndTime.text = "pm ${hour - 12}: 0${minute}"
+                                } else dialogBinding.textEndTime.text = "pm ${hour - 12}: $minute"
                             } else {
-                                dialogBinding.textEndTime.text = "am ${hour}: $minute"
+                                if (minute < 10) {
+                                    dialogBinding.textEndTime.text = "am ${hour - 12}: 0${minute}"
+                                } else dialogBinding.textEndTime.text = "am ${hour}: $minute"
                             }
                         }
                     }
@@ -276,6 +324,40 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    private fun sendNotification() {
+        var notCompletePlansCount = 0
+        database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (dataSnapshot in snapshot.children) {
+                    val item = dataSnapshot.getValue(PlanDto::class.java)
+                    if (item?.doneAble == false && item.date == planViewModel.getDate() && item.createUid == auth.currentUser?.uid) {
+                        notCompletePlansCount += 1
+                    } else continue
+                }
+
+                if (notCompletePlansCount != 0) {
+                    val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+
+                    val intent = Intent(this@MainActivity, AlarmReceiver::class.java)
+                    val pendingIntent = PendingIntent.getBroadcast(this@MainActivity, AlarmReceiver.NOTIFICATION_ID,
+                        intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+                    if (getTodayHour() == "23") {
+                        val triggerTime = (SystemClock.elapsedRealtime() + 10 * 1000)
+                        alarmManager.set(
+                            AlarmManager.ELAPSED_REALTIME,
+                            triggerTime,
+                            pendingIntent
+                        )
+                        "Alarm On"
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
     private fun setCalender() {
         binding.calendarView.setOnDateChangeListener { _, year, month, day ->
             startActivity(Intent(this, GetPlanActivity::class.java)
@@ -286,4 +368,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun getTodayHour(): String {
+        val now = System.currentTimeMillis()
+        val date = Date(now)
+        val format = SimpleDateFormat("HH", Locale.KOREA)
+        val timeZone = TimeZone.getTimeZone("Asia/Seoul")
+        format.timeZone = timeZone
+        return format.format(date)
+    }
 }
