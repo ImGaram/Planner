@@ -343,10 +343,11 @@ class MainActivity : AppCompatActivity() {
                         intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
                     if (getTodayHour() == "23") {
-                        val triggerTime = (SystemClock.elapsedRealtime() + 10 * 1000)
-                        alarmManager.set(
-                            AlarmManager.ELAPSED_REALTIME,
-                            triggerTime,
+                        val repeatInterval = AlarmManager.INTERVAL_DAY
+                        val triggerTime = (SystemClock.elapsedRealtime() + repeatInterval)
+                        alarmManager.setInexactRepeating(
+                            AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                            triggerTime, repeatInterval,
                             pendingIntent
                         )
                         "Alarm On"
