@@ -130,13 +130,19 @@ class MainActivity : AppCompatActivity() {
         binding.navigationDrawer.setNavigationItemSelectedListener {
             when(it.itemId) {
                 R.id.create_time_schedule -> {
-                    dialogLogic()
+                    if (auth.uid == null) {
+                        Toast.makeText(this, "시간표 생성은 로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show()
+                    } else dialogLogic()
                 }
                 R.id.modify_delete_time_schedule -> {
-                    startActivity(Intent(this, DeletePlanActivity::class.java))
+                    if (auth.uid == null) {
+                        Toast.makeText(this, "일정 삭제는 로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show()
+                    } else startActivity(Intent(this, DeletePlanActivity::class.java))
                 }
                 R.id.delete_time_table_plan -> {
-                    startActivity(Intent(this, DeleteTimeTablePlanActivity::class.java))
+                    if (auth.uid == null) {
+                        Toast.makeText(this, "시간표 삭제는 로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show()
+                    } else startActivity(Intent(this, DeleteTimeTablePlanActivity::class.java))
                 }
             }
             return@setNavigationItemSelectedListener true
@@ -361,11 +367,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun setCalender() {
         binding.calendarView.setOnDateChangeListener { _, year, month, day ->
-            startActivity(Intent(this, GetPlanActivity::class.java)
-                .putExtra("year", year) // int
-                .putExtra("month", month + 1)
-                .putExtra("day", day))
-            overridePendingTransition(R.anim.top_in, R.anim.none)
+            if (auth.uid == null) {
+                Toast.makeText(this, "일정 작성은 로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                startActivity(Intent(this, GetPlanActivity::class.java)
+                    .putExtra("year", year) // int
+                    .putExtra("month", month + 1)
+                    .putExtra("day", day))
+                overridePendingTransition(R.anim.top_in, R.anim.none)
+            }
+
         }
     }
 

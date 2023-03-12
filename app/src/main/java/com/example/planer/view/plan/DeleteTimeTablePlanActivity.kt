@@ -2,6 +2,7 @@ package com.example.planer.view.plan
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
@@ -20,6 +21,7 @@ class DeleteTimeTablePlanActivity : AppCompatActivity() {
     private val viewModel by viewModels<TimeTableViewModel>()
     private lateinit var binding: ActivityDeleteTimeTablePlanBinding
     private val database = FirebaseDatabase.getInstance()
+    private lateinit var adapter: DeleteTimeTableRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +40,7 @@ class DeleteTimeTablePlanActivity : AppCompatActivity() {
     private fun initRecycler() {
         val deleteTimeTableList = arrayListOf<TimeTableDto>()
         val numList = arrayListOf<String>()
-        val adapter = DeleteTimeTableRecyclerAdapter(deleteTimeTableList, numList)
+        adapter = DeleteTimeTableRecyclerAdapter(deleteTimeTableList, numList)
 
         database.getReference("schedules").addListenerForSingleValueEvent(object :ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
