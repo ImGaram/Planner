@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.planer.R
 import com.example.planer.databinding.RecyclerItemPlanListBinding
@@ -20,8 +22,18 @@ class PlanListRecyclerAdapter(
     private val planNumberList: ArrayList<String>,
     private val getPlanActivity: GetPlanActivity,
     private val day: String
-) : RecyclerView.Adapter<PlanListRecyclerAdapter.ViewHolder>() {
+) : ListAdapter<PlanDto, PlanListRecyclerAdapter.ViewHolder>(diffUtil) {
     private val database = FirebaseDatabase.getInstance()
+
+    companion object {
+        val diffUtil = object :DiffUtil.ItemCallback<PlanDto>() {
+            override fun areItemsTheSame(oldItem: PlanDto, newItem: PlanDto): Boolean =
+                oldItem == newItem
+
+            override fun areContentsTheSame(oldItem: PlanDto, newItem: PlanDto): Boolean =
+                oldItem.hashCode() == newItem.hashCode()
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = RecyclerItemPlanListBinding.inflate(LayoutInflater.from(parent.context), parent, false)

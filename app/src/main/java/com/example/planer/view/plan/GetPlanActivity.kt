@@ -36,6 +36,8 @@ class GetPlanActivity : AppCompatActivity() {
     private val auth = FirebaseAuth.getInstance()
     var category = "plan"
 
+    private lateinit var planListAdapter: PlanListRecyclerAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -73,7 +75,7 @@ class GetPlanActivity : AppCompatActivity() {
                         true -> {
                             Toast.makeText(this, "일정을 생성하였습니다.", Toast.LENGTH_SHORT).show()
                             dialog.dismiss()
-                            finish()
+//                            finish()    // 바꿔
                         }
                         false -> {
                             Toast.makeText(this, "일정 생성을 실패했습니다.", Toast.LENGTH_SHORT).show()
@@ -95,7 +97,7 @@ class GetPlanActivity : AppCompatActivity() {
         val planList :ArrayList<PlanDto> = arrayListOf()
         val planUidList = arrayListOf<String>()
 
-        val adapter = PlanListRecyclerAdapter(planList, planUidList, this, date)
+        planListAdapter = PlanListRecyclerAdapter(planList, planUidList, this, date)
 
         database.getReference("plans").addListenerForSingleValueEvent(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -104,9 +106,10 @@ class GetPlanActivity : AppCompatActivity() {
                     if (item?.date == date && item.createUid == auth.currentUser?.uid) {
                         planList.add(item)
                         planUidList.add(item.id.toString())
+                        planListAdapter.submitList(planList)
                     } else continue
                 }
-                adapter.notifyDataSetChanged()
+//                adapter.notifyDataSetChanged()
 
                 if (planList.size == 0) {
                     binding.planListRecyclerView.visibility = View.GONE
@@ -120,7 +123,7 @@ class GetPlanActivity : AppCompatActivity() {
             override fun onCancelled(error: DatabaseError) {}
         })
 
-        binding.planListRecyclerView.adapter = adapter
+        binding.planListRecyclerView.adapter = planListAdapter
         binding.planListRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
@@ -140,9 +143,9 @@ class GetPlanActivity : AppCompatActivity() {
                     if (item?.doneAble == false && item.date == date && item.createUid == auth.currentUser?.uid) {
                         notCompletedList.add(item)
                         planNumberList.add(item.id.toString())
+                        adapter.submitList(notCompletedList)
                     } else continue
                 }
-                adapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {
